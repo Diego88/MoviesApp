@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.dmoyahur.moviesapp.Movie
 import com.dmoyahur.moviesapp.R
+import com.dmoyahur.moviesapp.data.Movie
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

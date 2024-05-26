@@ -2,14 +2,16 @@ package com.dmoyahur.moviesapp.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.Movie
-import kotlinx.coroutines.delay
+import com.dmoyahur.moviesapp.data.Movie
+import com.dmoyahur.moviesapp.data.MoviesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MoviesViewModel : ViewModel() {
+
+    private val repository: MoviesRepository = MoviesRepository()
 
     private val _state = MutableStateFlow(UiState())
     val state: StateFlow<UiState> = _state.asStateFlow()
@@ -21,16 +23,12 @@ class MoviesViewModel : ViewModel() {
     private fun fetchPopularMovies() {
         viewModelScope.launch {
             _state.value = UiState(loading = true)
-            delay(1000)
-            _state.value = UiState(
-                loading = false,
-                movies = (1..100).map {
-                    Movie(
-                        id = it,
-                        title = "Movie $it",
-                        poster = "https://picsum.photos/200/300?id=$it"
-                    )
-                })
+            repository.fetchPopularMovies().also { movies ->
+                _state.value = UiState(
+                    loading = false,
+                    movies = movies
+                )
+            }
         }
     }
 
