@@ -1,4 +1,4 @@
-package com.dmoyahur.moviesapp.data
+package com.dmoyahur.moviesapp.data.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

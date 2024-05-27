@@ -1,4 +1,4 @@
-package com.dmoyahur.moviesapp.data
+package com.dmoyahur.moviesapp.data.remote
 
 import com.dmoyahur.moviesapp.BuildConfig
 import kotlinx.serialization.json.Json

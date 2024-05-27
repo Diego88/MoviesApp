@@ -25,44 +25,50 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.dmoyahur.moviesapp.R
 import com.dmoyahur.moviesapp.domain.MovieBo
 import com.dmoyahur.moviesapp.ui.common.LoadingIndicator
 
+
+@Composable
+fun MoviesScreen(viewModel: MoviesViewModel) {
+    val state by viewModel.state.collectAsState()
+
+    Screen {
+        MoviesContent(state)
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoviesScreen(viewModel: MoviesViewModel = viewModel()) {
-    Screen {
-        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+fun MoviesContent(state: MoviesViewModel.UiState) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = stringResource(id = R.string.app_name)) },
-                    scrollBehavior = scrollBehavior
-                )
-            },
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-        ) { padding ->
-            val state by viewModel.state.collectAsState()
-
-            if (state.loading) {
-                LoadingIndicator()
-            }
-
-            MoviesList(
-                movies = state.movies,
-                contentPadding = padding,
-                modifier = Modifier.padding(horizontal = 4.dp)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                scrollBehavior = scrollBehavior
             )
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) { padding ->
+
+        if (state.loading) {
+            LoadingIndicator()
         }
+
+        MoviesList(
+            movies = state.movies,
+            contentPadding = padding,
+            modifier = Modifier.padding(horizontal = 4.dp)
+        )
     }
 }
 
 @Composable
-fun MoviesList(
+private fun MoviesList(
     movies: List<MovieBo>,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
@@ -81,7 +87,7 @@ fun MoviesList(
 }
 
 @Composable
-fun MovieItem(movie: MovieBo) {
+private fun MovieItem(movie: MovieBo) {
     Column {
         AsyncImage(
             model = movie.poster,
@@ -103,6 +109,16 @@ fun MovieItem(movie: MovieBo) {
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
-    MoviesScreen()
+fun MoviesScreenPreview() {
+    Screen {
+        MoviesContent(MoviesViewModel.UiState(
+            movies = (1..100).map {
+                MovieBo(
+                    id = it,
+                    title = "Movie $it",
+                    poster = "https://picsum.photos/200/300?id=$it"
+                )
+            })
+        )
+    }
 }
