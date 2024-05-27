@@ -2,8 +2,8 @@ package com.dmoyahur.moviesapp.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.data.Movie
 import com.dmoyahur.moviesapp.data.MoviesRepository
+import com.dmoyahur.moviesapp.domain.MovieBo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,6 +34,6 @@ class MoviesViewModel : ViewModel() {
 
     data class UiState(
         val loading: Boolean = false,
-        val movies: List<Movie> = emptyList()
+        val movies: List<MovieBo> = emptyList()
     )
 }
