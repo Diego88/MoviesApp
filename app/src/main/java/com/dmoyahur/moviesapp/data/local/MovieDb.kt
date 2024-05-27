@@ -1,7 +1,11 @@
-package com.dmoyahur.moviesapp.domain
+package com.dmoyahur.moviesapp.data.local
 
-data class MovieBo(
-    val id: Int,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "Movie")
+data class MovieDb(
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val title: String,
     val overview: String,
     val popularity: Double,

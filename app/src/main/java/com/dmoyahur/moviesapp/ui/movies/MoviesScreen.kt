@@ -16,54 +16,58 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.moviesapp.R
 import com.dmoyahur.moviesapp.domain.MovieBo
 import com.dmoyahur.moviesapp.ui.common.LoadingIndicator
-
+import java.util.Date
+import kotlin.random.Random
 
 @Composable
-fun MoviesScreen(viewModel: MoviesViewModel) {
-    val state by viewModel.state.collectAsState()
+internal fun MoviesRoute(viewModel: MoviesViewModel) {
+    val state by viewModel.state.collectAsStateWithLifecycle(
+        lifecycleOwner = LocalLifecycleOwner.current
+    )
 
-    Screen {
-        MoviesContent(state)
-    }
+    MoviesScreen(state)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MoviesContent(state: MoviesViewModel.UiState) {
+internal fun MoviesScreen(state: MoviesViewModel.UiState) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) },
-                scrollBehavior = scrollBehavior
+    Screen {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = stringResource(id = R.string.app_name)) },
+                    scrollBehavior = scrollBehavior
+                )
+            },
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        ) { padding ->
+
+            if (state.loading) {
+                LoadingIndicator()
+            }
+
+            MoviesList(
+                movies = state.movies,
+                contentPadding = padding,
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-    ) { padding ->
-
-        if (state.loading) {
-            LoadingIndicator()
         }
-
-        MoviesList(
-            movies = state.movies,
-            contentPadding = padding,
-            modifier = Modifier.padding(horizontal = 4.dp)
-        )
     }
 }
 
@@ -110,15 +114,21 @@ private fun MovieItem(movie: MovieBo) {
 @Preview(showBackground = true)
 @Composable
 fun MoviesScreenPreview() {
-    Screen {
-        MoviesContent(MoviesViewModel.UiState(
+    MoviesScreen(
+        MoviesViewModel.UiState(
             movies = (1..100).map {
                 MovieBo(
                     id = it,
                     title = "Movie $it",
-                    poster = "https://picsum.photos/200/300?id=$it"
+                    overview = "Overview $it",
+                    popularity = Random.nextDouble(0.0, 10_000.0),
+                    releaseDate = Date().toString(),
+                    poster = "https://picsum.photos/200/300?id=$it",
+                    backdrop = null,
+                    originalTitle = "Movie $it",
+                    originalLanguage = "en",
+                    voteAverage = it / 10.0
                 )
             })
-        )
-    }
+    )
 }

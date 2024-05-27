@@ -4,33 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.data.MoviesRepository
 import com.dmoyahur.moviesapp.domain.MovieBo
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
-class MoviesViewModel(
-    private val repository: MoviesRepository
-) : ViewModel() {
+class MoviesViewModel(repository: MoviesRepository) : ViewModel() {
 
-    private val _state = MutableStateFlow(UiState())
-    val state: StateFlow<UiState> = _state.asStateFlow()
-
-    init {
-        fetchPopularMovies()
-    }
-
-    private fun fetchPopularMovies() {
-        viewModelScope.launch {
-            _state.value = UiState(loading = true)
-            repository.fetchPopularMovies().also { movies ->
-                _state.value = UiState(
-                    loading = false,
-                    movies = movies
-                )
-            }
-        }
-    }
+    val state: StateFlow<UiState> = repository.movies
+        .map { UiState(movies = it) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = UiState(loading = true)
+        )
 
     data class UiState(
         val loading: Boolean = false,
