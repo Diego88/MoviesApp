@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.moviesapp.R
 import com.dmoyahur.moviesapp.domain.MovieBo
+import com.dmoyahur.moviesapp.ui.common.ErrorScreen
 import com.dmoyahur.moviesapp.ui.common.LoadingIndicator
 import java.util.Date
 import kotlin.random.Random
@@ -39,12 +40,16 @@ internal fun MoviesRoute(viewModel: MoviesViewModel) {
         lifecycleOwner = LocalLifecycleOwner.current
     )
 
-    MoviesScreen(state)
+    if (state.error != null) {
+        ErrorScreen(error = state.error)
+    } else {
+        MoviesScreen(state = state)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MoviesScreen(state: MoviesViewModel.UiState) {
+internal fun MoviesScreen(state: MoviesUiState) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Screen {
@@ -57,16 +62,15 @@ internal fun MoviesScreen(state: MoviesViewModel.UiState) {
             },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
-
-            if (state.loading) {
-                LoadingIndicator()
-            }
-
             MoviesList(
                 movies = state.movies,
                 contentPadding = padding,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
+
+            if (state.loading) {
+                LoadingIndicator()
+            }
         }
     }
 }
@@ -115,7 +119,7 @@ private fun MovieItem(movie: MovieBo) {
 @Composable
 fun MoviesScreenPreview() {
     MoviesScreen(
-        MoviesViewModel.UiState(
+        state = MoviesUiState(
             movies = (1..100).map {
                 MovieBo(
                     id = it,
