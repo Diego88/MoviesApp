@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- COMMON -->
+    <string name="movies">Movies</string>
+    <string name="error">Error</string>
+    <string name="generic_error">An error occurred</string>
+    <string name="back">Go Back</string>
+
+    <!-- DETAIL -->
+    <string name="detail_original_language">Original language:</string>
+    <string name="detail_original_title">Original title:</string>
+    <string name="detail_release_date">Release date:</string>
+    <string name="detail_popularity">Popularity:</string>
+    <string name="detail_vote_average">Vote average:</string>
+</resources>
