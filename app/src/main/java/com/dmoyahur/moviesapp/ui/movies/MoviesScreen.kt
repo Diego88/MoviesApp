@@ -1,5 +1,6 @@
 package com.dmoyahur.moviesapp.ui.movies
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -36,7 +37,7 @@ import java.util.Date
 import kotlin.random.Random
 
 @Composable
-internal fun MoviesRoute(viewModel: MoviesViewModel) {
+internal fun MoviesRoute(viewModel: MoviesViewModel, onMovieClick: (MovieBo) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current
     )
@@ -44,13 +45,13 @@ internal fun MoviesRoute(viewModel: MoviesViewModel) {
     if (state.error != null) {
         ErrorScreen(error = state.error)
     } else {
-        MoviesScreen(state = state)
+        MoviesScreen(state = state, onMovieClick = onMovieClick)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MoviesScreen(state: MoviesUiState) {
+internal fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Screen {
@@ -66,6 +67,7 @@ internal fun MoviesScreen(state: MoviesUiState) {
             MoviesList(
                 movies = state.movies,
                 contentPadding = padding,
+                onMovieClick = onMovieClick,
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
 
@@ -80,6 +82,7 @@ internal fun MoviesScreen(state: MoviesUiState) {
 private fun MoviesList(
     movies: List<MovieBo>,
     contentPadding: PaddingValues,
+    onMovieClick: (MovieBo) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -90,14 +93,14 @@ private fun MoviesList(
         modifier = modifier
     ) {
         items(movies, key = { it.id }) {
-            MovieItem(movie = it)
+            MovieItem(movie = it) { onMovieClick(it) }
         }
     }
 }
 
 @Composable
-private fun MovieItem(movie: MovieBo) {
-    Column {
+private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
+    Column(modifier = Modifier.clickable(onClick = onClick)) {
         AsyncImage(
             model = movie.poster,
             contentDescription = movie.title,
@@ -134,6 +137,7 @@ fun MoviesScreenPreview() {
                     originalLanguage = "en",
                     voteAverage = it / 10.0
                 )
-            })
+            }),
+        onMovieClick = {}
     )
 }
