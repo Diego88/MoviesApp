@@ -15,6 +15,8 @@ import com.dmoyahur.moviesapp.data.MoviesRepository
 import com.dmoyahur.moviesapp.data.local.MoviesDatabase
 import com.dmoyahur.moviesapp.data.local.MoviesLocalDataSource
 import com.dmoyahur.moviesapp.data.remote.MoviesRemoteDataSource
+import com.dmoyahur.moviesapp.domain.usecases.FetchMoviesUseCase
+import com.dmoyahur.moviesapp.domain.usecases.FindMovieByIdUseCase
 import com.dmoyahur.moviesapp.ui.common.NavArgs
 import com.dmoyahur.moviesapp.ui.common.NavScreen
 import com.dmoyahur.moviesapp.ui.detail.DetailRoute
@@ -43,7 +45,7 @@ fun Navigation() {
     NavHost(navController = navController, startDestination = NavScreen.Movies.route) {
         composable(NavScreen.Movies.route) {
             MoviesRoute(
-                viewModel { MoviesViewModel(moviesRepository) },
+                viewModel { MoviesViewModel(FetchMoviesUseCase(moviesRepository)) },
                 onMovieClick = { movie ->
                     navController.navigate(NavScreen.Detail.createRoute(movie.id))
                 }
@@ -55,7 +57,7 @@ fun Navigation() {
         ) { backStackEntry ->
             val movieId = requireNotNull(backStackEntry.arguments?.getInt(NavArgs.MovieId.key))
             DetailRoute(
-                viewModel { DetailViewModel(moviesRepository, movieId) },
+                viewModel { DetailViewModel(FindMovieByIdUseCase(moviesRepository), movieId) },
                 onBack = { navController.popBackStack() })
         }
     }

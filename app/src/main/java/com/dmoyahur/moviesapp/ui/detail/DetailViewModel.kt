@@ -2,7 +2,7 @@ package com.dmoyahur.moviesapp.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.data.MoviesRepository
+import com.dmoyahur.moviesapp.domain.usecases.FindMovieByIdUseCase
 import com.dmoyahur.moviesapp.ui.common.Result
 import com.dmoyahur.moviesapp.ui.common.asResult
 import kotlinx.coroutines.flow.SharingStarted
@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class DetailViewModel(repository: MoviesRepository, id: Int) : ViewModel() {
+class DetailViewModel(findMovieByIdUseCase: FindMovieByIdUseCase, id: Int) : ViewModel() {
 
-    val state: StateFlow<DetailUiState> = repository.findMovieById(id)
+    val state: StateFlow<DetailUiState> = findMovieByIdUseCase(id)
         .asResult()
         .map { result ->
             when (result) {
