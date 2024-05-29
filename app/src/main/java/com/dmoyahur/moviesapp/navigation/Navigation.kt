@@ -11,16 +11,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.Room
-import com.dmoyahur.database.MoviesDatabase
-import com.dmoyahur.database.MoviesRoomDataSource
-import com.dmoyahur.domain.data.MoviesRepository
-import com.dmoyahur.domain.usecases.FetchMoviesUseCase
-import com.dmoyahur.domain.usecases.FindMovieByIdUseCase
-import com.dmoyahur.remote.MoviesNetworkDataSource
-import com.dmoyahur.ui.detail.DetailRoute
-import com.dmoyahur.ui.detail.DetailViewModel
-import com.dmoyahur.ui.movies.MoviesRoute
-import com.dmoyahur.ui.movies.MoviesViewModel
+import com.dmoyahur.moviesapp.data.database.MoviesDatabase
+import com.dmoyahur.moviesapp.data.database.MoviesRoomDataSource
+import com.dmoyahur.moviesapp.domain.data.MoviesRepository
+import com.dmoyahur.moviesapp.domain.usecases.FetchMoviesUseCase
+import com.dmoyahur.moviesapp.domain.usecases.FindMovieByIdUseCase
+import com.dmoyahur.moviesapp.data.network.MoviesNetworkDataSource
+import com.dmoyahur.moviesapp.ui.detail.DetailRoute
+import com.dmoyahur.moviesapp.ui.detail.DetailViewModel
+import com.dmoyahur.moviesapp.ui.movies.MoviesRoute
+import com.dmoyahur.moviesapp.ui.movies.MoviesViewModel
 
 @Composable
 fun Navigation() {
