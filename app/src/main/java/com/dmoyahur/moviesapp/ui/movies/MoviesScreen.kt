@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,8 +28,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.moviesapp.R
 import com.dmoyahur.moviesapp.domain.MovieBo
+import com.dmoyahur.moviesapp.ui.common.DefaultTopBar
 import com.dmoyahur.moviesapp.ui.common.ErrorScreen
 import com.dmoyahur.moviesapp.ui.common.LoadingIndicator
+import com.dmoyahur.moviesapp.ui.common.Screen
 import java.util.Date
 import kotlin.random.Random
 
@@ -55,8 +56,8 @@ internal fun MoviesScreen(state: MoviesUiState) {
     Screen {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(text = stringResource(id = R.string.app_name)) },
+                DefaultTopBar(
+                    title = stringResource(id = R.string.app_name),
                     scrollBehavior = scrollBehavior
                 )
             },

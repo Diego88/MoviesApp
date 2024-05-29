@@ -8,6 +8,8 @@ class MoviesLocalDataSource(private val moviesDao: MoviesDao) {
 
     val movies: Flow<List<MovieBo>> = moviesDao.fetchPopularMovies().map { it.toBo() }
 
+    fun findMovieById(id: Int): Flow<MovieBo?> = moviesDao.findMovieById(id).map { it?.toBo() }
+
     suspend fun save(movies: List<MovieBo>) = moviesDao.save(movies.toDb())
 }
 

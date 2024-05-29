@@ -1,4 +1,4 @@
-package com.dmoyahur.moviesapp.ui.movies
+package com.dmoyahur.moviesapp.ui.common
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface

@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.room.Room
 import com.dmoyahur.moviesapp.data.MoviesRepository
 import com.dmoyahur.moviesapp.data.local.MoviesDatabase
 import com.dmoyahur.moviesapp.data.local.MoviesLocalDataSource
 import com.dmoyahur.moviesapp.data.remote.MoviesRemoteDataSource
-import com.dmoyahur.moviesapp.ui.movies.MoviesRoute
-import com.dmoyahur.moviesapp.ui.movies.MoviesViewModel
+import com.dmoyahur.moviesapp.ui.detail.DetailRoute
+import com.dmoyahur.moviesapp.ui.detail.DetailViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -27,7 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MoviesRoute(
+            /*MoviesRoute(
                 viewModel {
                     MoviesViewModel(
                         repository = MoviesRepository(
@@ -36,6 +35,16 @@ class MainActivity : ComponentActivity() {
                         )
                     )
                 }
+            )*/
+            DetailRoute(
+                viewModel = DetailViewModel(
+                    repository = MoviesRepository(
+                        remoteDataSource = MoviesRemoteDataSource(),
+                        localDataSource = MoviesLocalDataSource(db.moviesDao())
+                    ),
+                    id = 693134
+                ),
+                onBack = {}
             )
         }
     }

@@ -11,6 +11,9 @@ class MoviesRemoteDataSource {
             .results
             .map { it.toBo() }
     }
+
+    suspend fun findMovieById(id: Int): MovieBo =
+        MoviesClient.instance.fetchMovieById(id).toBo()
 }
 
 private fun MovieDto.toBo() = MovieBo(
