@@ -4,5 +4,6 @@ import com.dmoyahur.moviesapp.domain.model.MovieBo
 
 interface MoviesRemoteDataSource {
     suspend fun fetchPopularMovies(): List<MovieBo>
-    suspend fun findMovieById(id: Int): MovieBo
+    suspend fun fetchMovieById(id: Int): MovieBo
+    suspend fun searchMovie(query: String): List<MovieBo>
 }

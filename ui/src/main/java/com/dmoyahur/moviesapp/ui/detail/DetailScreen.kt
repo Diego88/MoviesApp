@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.moviesapp.domain.model.MovieBo
-import com.dmoyahur.ui.R
 import com.dmoyahur.moviesapp.ui.common.DefaultTopBar
 import com.dmoyahur.moviesapp.ui.common.ErrorScreen
 import com.dmoyahur.moviesapp.ui.common.Screen
+import com.dmoyahur.ui.R
 
 @Composable
 fun DetailRoute(viewModel: DetailViewModel, onBack: () -> Unit) {
@@ -82,7 +82,7 @@ private fun MovieDetail(movie: MovieBo, modifier: Modifier = Modifier) {
             modifier = modifier.verticalScroll(rememberScrollState())
         ) {
             AsyncImage(
-                model = movie.backdrop,
+                model = movie.backdrop ?: R.drawable.poster_placeholder,
                 contentDescription = movie.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

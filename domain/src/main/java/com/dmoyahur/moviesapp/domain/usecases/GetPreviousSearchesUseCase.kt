@@ -4,7 +4,7 @@ import com.dmoyahur.moviesapp.domain.data.MoviesRepository
 import com.dmoyahur.moviesapp.domain.model.MovieBo
 import kotlinx.coroutines.flow.Flow
 
-class FetchMoviesUseCase(private val repository: MoviesRepository) {
+class GetPreviousSearchesUseCase(private val repository: MoviesRepository) {
 
-    operator fun invoke(): Flow<List<MovieBo>> = repository.movies
+    operator fun invoke(): Flow<List<MovieBo>> = repository.previousSearches
 }

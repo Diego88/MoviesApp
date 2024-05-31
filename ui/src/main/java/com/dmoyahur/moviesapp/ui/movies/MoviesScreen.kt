@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.moviesapp.domain.model.MovieBo
-import com.dmoyahur.ui.R
 import com.dmoyahur.moviesapp.ui.common.DefaultTopBar
 import com.dmoyahur.moviesapp.ui.common.ErrorScreen
 import com.dmoyahur.moviesapp.ui.common.LoadingIndicator
 import com.dmoyahur.moviesapp.ui.common.Screen
+import com.dmoyahur.ui.R
 import java.util.Date
 import kotlin.random.Random
 
@@ -42,11 +42,7 @@ fun MoviesRoute(viewModel: MoviesViewModel, onMovieClick: (MovieBo) -> Unit) {
         lifecycleOwner = LocalLifecycleOwner.current
     )
 
-    if (state.error != null) {
-        ErrorScreen(error = state.error)
-    } else {
-        MoviesScreen(state = state, onMovieClick = onMovieClick)
-    }
+    MoviesScreen(state = state, onMovieClick = onMovieClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,21 +54,25 @@ internal fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit)
         Scaffold(
             topBar = {
                 DefaultTopBar(
-                    title = stringResource(id = R.string.movies),
+                    title = stringResource(id = R.string.movies_popular),
                     scrollBehavior = scrollBehavior
                 )
             },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { padding ->
-            MoviesList(
-                movies = state.movies,
-                contentPadding = padding,
-                onMovieClick = onMovieClick,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
+            if (state.error != null) {
+                ErrorScreen(error = state.error)
+            } else {
+                MoviesList(
+                    movies = state.movies,
+                    contentPadding = padding,
+                    onMovieClick = onMovieClick,
+                    modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 32.dp)
+                )
 
-            if (state.loading) {
-                LoadingIndicator()
+                if (state.loading) {
+                    LoadingIndicator()
+                }
             }
         }
     }
@@ -102,7 +102,7 @@ private fun MoviesList(
 private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
     Column(modifier = Modifier.clickable(onClick = onClick)) {
         AsyncImage(
-            model = movie.poster,
+            model = movie.poster ?: R.drawable.poster_placeholder,
             contentDescription = movie.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier

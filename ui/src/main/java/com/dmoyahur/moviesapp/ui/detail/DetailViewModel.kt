@@ -10,9 +10,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class DetailViewModel(findMovieByIdUseCase: FindMovieByIdUseCase, id: Int) : ViewModel() {
+class DetailViewModel(
+    findMovieByIdUseCase: FindMovieByIdUseCase,
+    id: Int,
+    fromSearch: Boolean
+) : ViewModel() {
 
-    val state: StateFlow<DetailUiState> = findMovieByIdUseCase(id)
+    val state: StateFlow<DetailUiState> = findMovieByIdUseCase(id, fromSearch)
         .asResult()
         .map { result ->
             when (result) {

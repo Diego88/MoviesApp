@@ -15,8 +15,8 @@ object MovieDtoMapper {
                 overview = overview,
                 popularity = popularity,
                 releaseDate = releaseDate,
-                poster = "${POSTER_URL}w185/$posterPath",
-                backdrop = backdropPath?.let { "${POSTER_URL}w780/$it" },
+                poster = posterPath?.let { "${POSTER_URL}w185$it" },
+                backdrop = backdropPath?.let { "${POSTER_URL}w780$it" },
                 originalTitle = originalTitle,
                 originalLanguage = originalLanguage,
                 voteAverage = voteAverage

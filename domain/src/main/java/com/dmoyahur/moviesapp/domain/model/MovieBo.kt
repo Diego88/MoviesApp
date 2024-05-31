@@ -6,7 +6,7 @@ data class MovieBo(
     val overview: String,
     val popularity: Double,
     val releaseDate: String,
-    val poster: String,
+    val poster: String?,
     val backdrop: String?,
     val originalTitle: String,
     val originalLanguage: String,

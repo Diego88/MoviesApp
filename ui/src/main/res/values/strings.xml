@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- COMMON -->
-    <string name="movies">Movies</string>
     <string name="error">Error</string>
     <string name="generic_error">An error occurred</string>
     <string name="back">Go Back</string>
+    <string name="close">Close</string>
+    <string name="search">Search</string>
+
+    <!-- MOVIES -->
+    <string name="movies_popular">Popular Movies</string>
 
     <!-- DETAIL -->
     <string name="detail_original_language">Original language:</string>
@@ -12,4 +16,9 @@
     <string name="detail_release_date">Release date:</string>
     <string name="detail_popularity">Popularity:</string>
     <string name="detail_vote_average">Vote average:</string>
+
+    <!-- SEARCH -->
+    <string name="search_previous_searches">Previous searches</string>
+    <string name="search_main_results">Main results</string>
+    <string name="search_no_results">No results found</string>
 </resources>

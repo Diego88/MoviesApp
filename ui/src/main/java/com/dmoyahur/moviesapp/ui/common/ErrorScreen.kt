@@ -16,29 +16,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dmoyahur.ui.R
 
 @Composable
 internal fun ErrorScreen(error: Throwable?, modifier: Modifier = Modifier) {
-    Screen {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
-        ) {
-            CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
-                Icon(
-                    imageVector = Icons.Default.Info,
-                    contentDescription = stringResource(id = R.string.error),
-                    modifier = Modifier.size(64.dp)
-                )
-                Text(
-                    text = error?.localizedMessage ?: stringResource(id = R.string.generic_error),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-            }
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+    ) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.error) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = stringResource(id = R.string.error),
+                modifier = Modifier.size(64.dp)
+            )
+            Text(
+                text = error?.localizedMessage ?: stringResource(id = R.string.generic_error),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+            )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ErrorScreenPreview() {
+    ErrorScreen(error = Throwable())
 }

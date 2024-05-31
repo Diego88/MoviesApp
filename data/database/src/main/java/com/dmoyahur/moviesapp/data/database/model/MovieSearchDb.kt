@@ -3,8 +3,8 @@ package com.dmoyahur.moviesapp.data.database.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Movie")
-data class MovieDb(
+@Entity(tableName = "MovieSearch")
+data class MovieSearchDb(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val title: String,
     val overview: String,
@@ -14,5 +14,6 @@ data class MovieDb(
     val backdrop: String?,
     val originalTitle: String,
     val originalLanguage: String,
-    val voteAverage: Double
+    val voteAverage: Double,
+    val timeStamp: Long
 )

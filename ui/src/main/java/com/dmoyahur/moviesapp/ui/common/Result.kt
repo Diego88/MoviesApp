@@ -16,6 +16,6 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> {
         .map<T, Result<T>> {
             Result.Success(it)
         }
-        .catch { emit(Result.Error(it)) }
         .onStart { emit(Result.Loading) }
+        .catch { emit(Result.Error(it)) }
 }
