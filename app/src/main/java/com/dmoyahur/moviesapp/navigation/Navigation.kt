@@ -27,20 +27,26 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.room.Room
-import com.dmoyahur.moviesapp.data.database.MoviesDatabase
-import com.dmoyahur.moviesapp.data.database.MoviesRoomDataSource
-import com.dmoyahur.moviesapp.data.network.MoviesNetworkDataSource
-import com.dmoyahur.moviesapp.domain.data.MoviesRepository
-import com.dmoyahur.moviesapp.domain.usecases.FetchMoviesUseCase
-import com.dmoyahur.moviesapp.domain.usecases.FindMovieByIdUseCase
-import com.dmoyahur.moviesapp.domain.usecases.GetPreviousSearchesUseCase
-import com.dmoyahur.moviesapp.domain.usecases.SearchMovieUseCase
-import com.dmoyahur.moviesapp.ui.detail.DetailRoute
-import com.dmoyahur.moviesapp.ui.detail.DetailViewModel
-import com.dmoyahur.moviesapp.ui.movies.MoviesRoute
-import com.dmoyahur.moviesapp.ui.movies.MoviesViewModel
-import com.dmoyahur.moviesapp.ui.search.SearchRoute
-import com.dmoyahur.moviesapp.ui.search.SearchViewModel
+import com.dmoyahur.domain.detail.GetMovieByIdUseCase
+import com.dmoyahur.moviesapp.core.database.MoviesRoomDatabase
+import com.dmoyahur.moviesapp.core.network.RetrofitClient
+import com.dmoyahur.moviesapp.data.movies.database.MoviesRoomDataSource
+import com.dmoyahur.moviesapp.data.movies.network.MoviesNetworkDataSource
+import com.dmoyahur.moviesapp.data.search.database.SearchRoomDataSource
+import com.dmoyahur.moviesapp.data.search.network.SearchNetworkDataSource
+import com.dmoyahur.moviesapp.domain.movies.data.MoviesRepository
+import com.dmoyahur.moviesapp.domain.movies.usecases.FetchMoviesUseCase
+import com.dmoyahur.moviesapp.domain.movies.usecases.FindMovieByIdUseCase
+import com.dmoyahur.moviesapp.domain.search.data.SearchRepository
+import com.dmoyahur.moviesapp.domain.search.usecases.FetchMovieByIdUseCase
+import com.dmoyahur.moviesapp.domain.search.usecases.GetPreviousSearchesUseCase
+import com.dmoyahur.moviesapp.domain.search.usecases.SearchMovieUseCase
+import com.dmoyahur.moviesapp.feature.detail.ui.DetailRoute
+import com.dmoyahur.moviesapp.feature.detail.ui.DetailViewModel
+import com.dmoyahur.moviesapp.feature.movies.ui.MoviesRoute
+import com.dmoyahur.moviesapp.feature.movies.ui.MoviesViewModel
+import com.dmoyahur.moviesapp.feature.search.ui.SearchRoute
+import com.dmoyahur.moviesapp.feature.search.ui.SearchViewModel
 
 @Composable
 fun Navigation() {
@@ -54,14 +60,20 @@ fun Navigation() {
     val db by lazy {
         Room.databaseBuilder(
             appContext,
-            MoviesDatabase::class.java,
+            MoviesRoomDatabase::class.java,
             "movies.db"
         ).build()
     }
     val moviesRepository = remember {
         MoviesRepository(
-            remoteDataSource = MoviesNetworkDataSource(),
+            remoteDataSource = MoviesNetworkDataSource(RetrofitClient.moviesInstance),
             localDataSource = MoviesRoomDataSource(db.moviesDao())
+        )
+    }
+    val searchRepository = remember {
+        SearchRepository(
+            remoteDataSource = SearchNetworkDataSource(RetrofitClient.searchInstance),
+            localDataSource = SearchRoomDataSource(db.searchDao())
         )
     }
 
@@ -114,9 +126,18 @@ fun Navigation() {
         ) {
             composable(NavScreen.Movies.route) {
                 MoviesRoute(
-                    viewModel { MoviesViewModel(FetchMoviesUseCase(moviesRepository)) },
+                    viewModel {
+                        MoviesViewModel(
+                            FetchMoviesUseCase(moviesRepository)
+                        )
+                    },
                     onMovieClick = { movie ->
-                        navController.navigate(NavScreen.Detail.createRoute(movie.id, NavScreen.Movies.route))
+                        navController.navigate(
+                            NavScreen.Detail.createRoute(
+                                movie.id,
+                                NavScreen.Movies.route
+                            )
+                        )
                     }
                 )
             }
@@ -133,7 +154,10 @@ fun Navigation() {
                 DetailRoute(
                     viewModel {
                         DetailViewModel(
-                            FindMovieByIdUseCase(moviesRepository),
+                            GetMovieByIdUseCase(
+                                FindMovieByIdUseCase(moviesRepository),
+                                FetchMovieByIdUseCase(searchRepository)
+                            ),
                             movieId,
                             fromSearch
                         )
@@ -144,12 +168,17 @@ fun Navigation() {
                 SearchRoute(
                     viewModel {
                         SearchViewModel(
-                            getPreviousSearchesUseCase = GetPreviousSearchesUseCase(moviesRepository),
-                            searchMovieUseCase = SearchMovieUseCase(moviesRepository)
+                            getPreviousSearchesUseCase = GetPreviousSearchesUseCase(searchRepository),
+                            searchMovieUseCase = SearchMovieUseCase(searchRepository)
                         )
                     },
                     onMovieClick = { movie ->
-                        navController.navigate(NavScreen.Detail.createRoute(movie.id, NavScreen.Search.route))
+                        navController.navigate(
+                            NavScreen.Detail.createRoute(
+                                movie.id,
+                                NavScreen.Search.route
+                            )
+                        )
                     }
                 )
             }

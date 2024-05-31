@@ -58,10 +58,18 @@ android {
 
 dependencies {
 
-    implementation(project(":ui"))
-    implementation(project(":domain"))
-    implementation(project(":data:network"))
-    implementation(project(":data:database"))
+    implementation(project(":feature:movies"))
+    implementation(project(":feature:search"))
+    implementation(project(":feature:detail"))
+    implementation(project(":core:model"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:database"))
+    implementation(project(":core:network"))
+    implementation(project(":domain:movies"))
+    implementation(project(":domain:search"))
+    implementation(project(":domain:detail"))
+    implementation(project(":data:movies"))
+    implementation(project(":data:search"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material)

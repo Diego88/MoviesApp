@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error">Error</string>
+    <string name="generic_error">An error occurred</string>
+    <string name="back">Go Back</string>
+    <string name="close">Close</string>
+    <string name="search">Search</string>
+</resources>
