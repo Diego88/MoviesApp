@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.core.model.MovieBo
@@ -50,7 +51,7 @@ import kotlin.random.Random
 import com.dmoyahur.moviesapp.core.ui.R as commonRes
 
 @Composable
-fun SearchRoute(viewModel: SearchViewModel, onMovieClick: (MovieBo) -> Unit) {
+fun SearchRoute(viewModel: SearchViewModel = hiltViewModel(), onMovieClick: (MovieBo) -> Unit) {
     val state by viewModel.searchUiState.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current
     )

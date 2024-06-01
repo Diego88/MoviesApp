@@ -7,6 +7,7 @@ import com.dmoyahur.moviesapp.core.ui.Result
 import com.dmoyahur.moviesapp.core.ui.asResult
 import com.dmoyahur.moviesapp.domain.search.usecases.GetPreviousSearchesUseCase
 import com.dmoyahur.moviesapp.domain.search.usecases.SearchMovieUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,11 +17,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SearchViewModel(
-    getPreviousSearchesUseCase: GetPreviousSearchesUseCase,
-    private val searchMovieUseCase: SearchMovieUseCase
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val searchMovieUseCase: SearchMovieUseCase,
+    getPreviousSearchesUseCase: GetPreviousSearchesUseCase
 ) : ViewModel() {
 
     private val query = MutableStateFlow("")

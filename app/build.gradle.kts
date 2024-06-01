@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.moviesapp.android.application)
     alias(libs.plugins.moviesapp.android.application.compose)
-    alias(libs.plugins.moviesapp.di.library)
+    alias(libs.plugins.moviesapp.di.library.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
 }

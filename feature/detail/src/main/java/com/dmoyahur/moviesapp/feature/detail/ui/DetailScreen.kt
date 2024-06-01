@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.core.model.MovieBo
@@ -37,7 +38,7 @@ import com.dmoyahur.moviesapp.feature.detail.R
 import com.dmoyahur.moviesapp.core.ui.R as commonRes
 
 @Composable
-fun DetailRoute(viewModel: DetailViewModel, onBack: () -> Unit) {
+fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
 
     val state by viewModel.state.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current

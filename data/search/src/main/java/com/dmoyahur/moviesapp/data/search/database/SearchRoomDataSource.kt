@@ -5,8 +5,11 @@ import com.dmoyahur.moviesapp.data.search.database.mapper.MovieSearchDbMapper
 import com.dmoyahur.moviesapp.domain.search.data.SearchLocalDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class SearchRoomDataSource(private val moviesDao: SearchDao) : SearchLocalDataSource {
+class SearchRoomDataSource @Inject constructor(
+    private val moviesDao: SearchDao
+) : SearchLocalDataSource {
 
     override val previousSearches: Flow<List<MovieBo>> =
         moviesDao.getMoviesSearch().map { MovieSearchDbMapper.mapToDomain(it) }

@@ -10,9 +10,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
 
-object RetrofitClient {
+internal class RetrofitClient {
 
-    private const val BASE_URL = "https://api.themoviedb.org/3/"
+    companion object {
+        private const val BASE_URL = "https://api.themoviedb.org/3/"
+    }
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(::apiKeyAsQuery)

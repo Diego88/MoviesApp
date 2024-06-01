@@ -5,12 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.core.ui.Result
 import com.dmoyahur.moviesapp.core.ui.asResult
 import com.dmoyahur.moviesapp.domain.movies.usecases.FetchMoviesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
-class MoviesViewModel(fetchMoviesUseCase: FetchMoviesUseCase) : ViewModel() {
+@HiltViewModel
+class MoviesViewModel @Inject constructor(fetchMoviesUseCase: FetchMoviesUseCase) : ViewModel() {
 
     val state: StateFlow<MoviesUiState> = fetchMoviesUseCase()
         .asResult()

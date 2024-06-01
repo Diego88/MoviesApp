@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.core.model.MovieBo
@@ -38,12 +39,12 @@ import kotlin.random.Random
 import com.dmoyahur.moviesapp.core.ui.R as commonRes
 
 @Composable
-fun MoviesRoute(viewModel: MoviesViewModel, onMovieClick: (MovieBo) -> Unit) {
+fun MoviesRoute(viewModel: MoviesViewModel = hiltViewModel(), onMovieClick: (MovieBo) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current
     )
 
-    MoviesScreen(state = state, onMovieClick = onMovieClick)
+    MoviesScreen(state, onMovieClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
