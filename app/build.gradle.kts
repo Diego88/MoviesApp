@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.moviesapp.android.application)
+    alias(libs.plugins.moviesapp.android.application.compose)
+    alias(libs.plugins.moviesapp.di.library)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
@@ -78,7 +79,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
-
     implementation(libs.androidx.room.ktx)
 
     testImplementation(libs.junit)

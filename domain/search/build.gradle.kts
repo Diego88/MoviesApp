@@ -1,15 +1,9 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    alias(libs.plugins.moviesapp.jvm.library)
+    alias(libs.plugins.moviesapp.di.library)
 }
 
 dependencies {
-
     implementation(project(":core:model"))
     implementation(libs.kotlinx.coroutines.core)
 
