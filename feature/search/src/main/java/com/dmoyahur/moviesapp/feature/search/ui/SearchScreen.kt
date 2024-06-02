@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.ui.BackPressedHandler
 import com.dmoyahur.moviesapp.core.ui.ErrorScreen
 import com.dmoyahur.moviesapp.core.ui.LoadingIndicator
 import com.dmoyahur.moviesapp.core.ui.Screen
@@ -51,7 +52,11 @@ import kotlin.random.Random
 import com.dmoyahur.moviesapp.core.ui.R as commonRes
 
 @Composable
-fun SearchRoute(viewModel: SearchViewModel = hiltViewModel(), onMovieClick: (MovieBo) -> Unit) {
+fun SearchRoute(
+    viewModel: SearchViewModel = hiltViewModel(),
+    onMovieClick: (MovieBo) -> Unit,
+    onBack: () -> Unit
+) {
     val state by viewModel.searchUiState.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current
     )
@@ -59,7 +64,8 @@ fun SearchRoute(viewModel: SearchViewModel = hiltViewModel(), onMovieClick: (Mov
     SearchScreen(
         state = state,
         onQueryChange = { viewModel.onQueryChange(it) },
-        onMovieClick = onMovieClick
+        onMovieClick = onMovieClick,
+        onBack = onBack
     )
 }
 
@@ -68,7 +74,8 @@ fun SearchRoute(viewModel: SearchViewModel = hiltViewModel(), onMovieClick: (Mov
 internal fun SearchScreen(
     state: SearchUiState,
     onQueryChange: (String) -> Unit,
-    onMovieClick: (MovieBo) -> Unit
+    onMovieClick: (MovieBo) -> Unit,
+    onBack: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -83,7 +90,7 @@ internal fun SearchScreen(
                 onQueryChange = { onQueryChange(it) },
                 onSearch = { keyboardController?.hide() },
                 active = true,
-                onActiveChange = { },
+                onActiveChange = {},
                 placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
                 leadingIcon = {
                     Icon(
@@ -128,6 +135,10 @@ internal fun SearchScreen(
                     if (state.loading) {
                         LoadingIndicator()
                     }
+                }
+
+                BackPressedHandler {
+                    onBack()
                 }
             }
         }
@@ -206,7 +217,7 @@ private fun SearchItem(movie: MovieBo, onClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun SearchScreenPreview() {
+private fun SearchScreenPreview() {
     SearchScreen(
         state = SearchUiState(
             movies = (1..10).map {
@@ -224,6 +235,7 @@ fun SearchScreenPreview() {
                 )
             }),
         onQueryChange = {},
-        onMovieClick = {}
+        onMovieClick = {},
+        onBack = {}
     )
 }

@@ -139,7 +139,7 @@ private fun MovieDetailProperty(
 
 @Preview(showBackground = true)
 @Composable
-fun DetailScreenPreview() {
+private fun DetailScreenPreview() {
     DetailScreen(
         state = DetailUiState(
             movie = MovieBo(

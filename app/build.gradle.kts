@@ -2,7 +2,6 @@ plugins {
     alias(libs.plugins.moviesapp.android.application)
     alias(libs.plugins.moviesapp.android.application.compose)
     alias(libs.plugins.moviesapp.di.library.compose)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
 }
 
@@ -73,13 +72,7 @@ dependencies {
     implementation(project(":data:search"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.material)
-    implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.room.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

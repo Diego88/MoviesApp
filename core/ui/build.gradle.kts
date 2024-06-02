@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.dmoyahur.moviesapp.core.ui"
 }
+
+dependencies {
+    implementation(libs.androidx.activity.compose)
+}

@@ -123,7 +123,7 @@ private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun MoviesScreenPreview() {
+private fun MoviesScreenPreview() {
     MoviesScreen(
         state = MoviesUiState(
             movies = (1..100).map {
