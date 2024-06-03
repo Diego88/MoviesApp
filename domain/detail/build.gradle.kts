@@ -9,5 +9,8 @@ dependencies {
     implementation(project(":domain:search"))
     implementation(libs.kotlinx.coroutines.core)
 
+    testImplementation(project(":core:testing"))
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

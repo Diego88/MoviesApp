@@ -12,7 +12,7 @@ class MoviesRoomDataSource @Inject constructor(
 ) : MoviesLocalDataSource {
 
     override val movies: Flow<List<MovieBo>> =
-        moviesDao.fetchPopularMovies().map { MovieDbMapper.mapToDomain(it) }
+        moviesDao.getPopularMovies().map { MovieDbMapper.mapToDomain(it) }
 
     override fun findMovieById(id: Int): Flow<MovieBo?> =
         moviesDao.findMovieById(id).map { movie -> movie?.let { MovieDbMapper.mapToDomain(it) } }

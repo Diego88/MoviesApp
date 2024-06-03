@@ -1,5 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -32,6 +34,7 @@ include(":core:data")
 include(":core:ui")
 include(":core:database")
 include(":core:network")
+include(":core:testing")
 include(":domain:movies")
 include(":domain:search")
 include(":domain:detail")

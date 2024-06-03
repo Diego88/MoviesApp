@@ -127,7 +127,7 @@ private fun MoviesScreenPreview() {
     Screen {
         MoviesScreen(
             state = MoviesUiState(
-                movies = (1..100).map {
+                movies = (1..10).map {
                     MovieBo(
                         id = it,
                         title = "Movie $it",
