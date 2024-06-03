@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.data.movies.database.mapper
 
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import com.dmoyahur.moviesapp.data.movies.database.model.MovieDb
 
 object MovieDbMapper {

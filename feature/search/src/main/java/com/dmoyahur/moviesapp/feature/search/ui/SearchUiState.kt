@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.feature.search.ui
 
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 
 data class SearchUiState(
     val query: String = "",

@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.core.data.network.mapper
 
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import com.dmoyahur.moviesapp.core.data.network.model.MovieDto
 
 object MovieDtoMapper {

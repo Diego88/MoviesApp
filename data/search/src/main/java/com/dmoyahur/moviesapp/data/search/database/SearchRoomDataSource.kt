@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.data.search.database
 
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import com.dmoyahur.moviesapp.data.search.database.mapper.MovieSearchDbMapper
 import com.dmoyahur.moviesapp.domain.search.data.SearchLocalDataSource
 import kotlinx.coroutines.flow.Flow

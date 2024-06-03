@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.domain.search.data
 
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import kotlinx.coroutines.flow.Flow
 
 interface SearchLocalDataSource {

@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.data.movies.database
 
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import com.dmoyahur.moviesapp.data.movies.database.mapper.MovieDbMapper
 import com.dmoyahur.moviesapp.domain.movies.data.MoviesLocalDataSource
 import kotlinx.coroutines.flow.Flow

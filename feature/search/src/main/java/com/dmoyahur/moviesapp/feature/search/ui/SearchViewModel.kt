@@ -2,7 +2,7 @@ package com.dmoyahur.moviesapp.feature.search.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.core.model.MovieBo
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import com.dmoyahur.moviesapp.core.ui.model.Result
 import com.dmoyahur.moviesapp.core.ui.model.asResult
 import com.dmoyahur.moviesapp.domain.search.usecases.GetPreviousSearchesUseCase
