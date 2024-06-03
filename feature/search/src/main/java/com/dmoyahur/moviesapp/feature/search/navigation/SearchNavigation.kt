@@ -7,8 +7,8 @@ import com.dmoyahur.moviesapp.feature.search.ui.SearchRoute
 
 const val SEARCH_ROUTE = "search"
 
-fun NavGraphBuilder.searchScreen(onMovieClick: (MovieBo) -> Unit, onBack: () -> Unit) {
+fun NavGraphBuilder.searchScreen(onMovieClick: (MovieBo) -> Unit) {
     composable(SEARCH_ROUTE) {
-        SearchRoute(onMovieClick = onMovieClick, onBack = onBack)
+        SearchRoute(onMovieClick = onMovieClick)
     }
 }

@@ -17,26 +17,25 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import com.dmoyahur.core.model.MovieBo
-import com.dmoyahur.moviesapp.core.ui.DefaultTopBar
-import com.dmoyahur.moviesapp.core.ui.ErrorScreen
-import com.dmoyahur.moviesapp.core.ui.LoadingIndicator
-import com.dmoyahur.moviesapp.core.ui.Screen
+import com.dmoyahur.moviesapp.core.ui.components.DefaultTopBar
+import com.dmoyahur.moviesapp.core.ui.components.ErrorScreen
+import com.dmoyahur.moviesapp.core.ui.components.ImageCoil
+import com.dmoyahur.moviesapp.core.ui.components.LoadingIndicator
+import com.dmoyahur.moviesapp.core.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.movies.R
-import java.util.Date
 import kotlin.random.Random
-import com.dmoyahur.moviesapp.core.ui.R as commonRes
 
 @Composable
 fun MoviesRoute(viewModel: MoviesViewModel = hiltViewModel(), onMovieClick: (MovieBo) -> Unit) {
@@ -52,29 +51,27 @@ fun MoviesRoute(viewModel: MoviesViewModel = hiltViewModel(), onMovieClick: (Mov
 internal fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Screen {
-        Scaffold(
-            topBar = {
-                DefaultTopBar(
-                    title = stringResource(id = R.string.movies_popular),
-                    scrollBehavior = scrollBehavior
-                )
-            },
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-        ) { padding ->
-            if (state.error != null) {
-                ErrorScreen(error = state.error)
-            } else {
-                MoviesList(
-                    movies = state.movies,
-                    contentPadding = padding,
-                    onMovieClick = onMovieClick,
-                    modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 32.dp)
-                )
+    Scaffold(
+        topBar = {
+            DefaultTopBar(
+                title = stringResource(id = R.string.movies_popular),
+                scrollBehavior = scrollBehavior
+            )
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) { padding ->
+        if (state.error != null) {
+            ErrorScreen(error = state.error)
+        } else {
+            MoviesList(
+                movies = state.movies,
+                contentPadding = padding,
+                onMovieClick = onMovieClick,
+                modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 80.dp)
+            )
 
-                if (state.loading) {
-                    LoadingIndicator()
-                }
+            if (state.loading) {
+                LoadingIndicator()
             }
         }
     }
@@ -88,7 +85,7 @@ private fun MoviesList(
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(120.dp),
+        columns = GridCells.Fixed(3),
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -102,11 +99,13 @@ private fun MoviesList(
 
 @Composable
 private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
-    Column(modifier = Modifier.clickable(onClick = onClick)) {
-        AsyncImage(
-            model = movie.poster ?: commonRes.drawable.poster_placeholder,
+    Column(
+        modifier = Modifier.clickable(onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ImageCoil(
+            imageUrl = movie.poster,
             contentDescription = movie.title,
-            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(2 / 3f)
@@ -114,8 +113,9 @@ private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
         )
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -124,22 +124,24 @@ private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 private fun MoviesScreenPreview() {
-    MoviesScreen(
-        state = MoviesUiState(
-            movies = (1..100).map {
-                MovieBo(
-                    id = it,
-                    title = "Movie $it",
-                    overview = "Overview $it",
-                    popularity = Random.nextDouble(0.0, 10_000.0),
-                    releaseDate = Date().toString(),
-                    poster = "https://picsum.photos/200/300?id=$it",
-                    backdrop = null,
-                    originalTitle = "Movie $it",
-                    originalLanguage = "en",
-                    voteAverage = it / 10.0
-                )
-            }),
-        onMovieClick = {}
-    )
+    Screen {
+        MoviesScreen(
+            state = MoviesUiState(
+                movies = (1..100).map {
+                    MovieBo(
+                        id = it,
+                        title = "Movie $it",
+                        overview = "Overview $it",
+                        popularity = Random.nextDouble(0.0, 10_000.0),
+                        releaseDate = "",
+                        poster = null,
+                        backdrop = null,
+                        originalTitle = "Movie $it",
+                        originalLanguage = "en",
+                        voteAverage = it / 10.0
+                    )
+                }),
+            onMovieClick = {}
+        )
+    }
 }

@@ -3,8 +3,8 @@ package com.dmoyahur.moviesapp.feature.search.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.core.model.MovieBo
-import com.dmoyahur.moviesapp.core.ui.Result
-import com.dmoyahur.moviesapp.core.ui.asResult
+import com.dmoyahur.moviesapp.core.ui.model.Result
+import com.dmoyahur.moviesapp.core.ui.model.asResult
 import com.dmoyahur.moviesapp.domain.search.usecases.GetPreviousSearchesUseCase
 import com.dmoyahur.moviesapp.domain.search.usecases.SearchMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,11 +33,15 @@ class SearchViewModel @Inject constructor(
 
     private val moviesState: Flow<Result<List<MovieBo>>> = query
         .flatMapLatest {
-            if (it.isEmpty()) flowOf(emptyList()) else searchMovieUseCase(it)
+            if (it.isEmpty()) {
+                flowOf(emptyList())
+            } else {
+                searchMovieUseCase(it)
+            }
         }
         .asResult()
 
-    val searchUiState: StateFlow<SearchUiState> =
+    val state: StateFlow<SearchUiState> =
         combine(
             query,
             previousSearchesState,
@@ -47,9 +51,10 @@ class SearchViewModel @Inject constructor(
                 query = query,
                 previousSearches = if (previousSearches is Result.Success) previousSearches.data else emptyList(),
                 movies = if (movies is Result.Success) movies.data else emptyList(),
-                loading = previousSearches is Result.Loading,
+                loading = previousSearches is Result.Loading || movies is Result.Loading,
                 error = when {
                     previousSearches is Result.Error -> previousSearches.exception
+                    query.isEmpty() -> null
                     movies is Result.Error -> movies.exception
                     else -> null
                 }

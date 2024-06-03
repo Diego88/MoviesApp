@@ -2,8 +2,8 @@ package com.dmoyahur.moviesapp.feature.movies.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.core.ui.Result
-import com.dmoyahur.moviesapp.core.ui.asResult
+import com.dmoyahur.moviesapp.core.ui.model.Result
+import com.dmoyahur.moviesapp.core.ui.model.asResult
 import com.dmoyahur.moviesapp.domain.movies.usecases.FetchMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

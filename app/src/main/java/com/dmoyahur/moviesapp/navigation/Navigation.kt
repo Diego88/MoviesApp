@@ -6,6 +6,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -32,25 +33,29 @@ fun Navigation() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val currentRoute = currentDestination?.route
+    val shouldShowNavigationBar = currentRoute in BottomNavScreen.entries.map { it.route }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             AnimatedVisibility(
-                visible = currentRoute in BottomNavScreen.entries.map { it.route },
+                visible = shouldShowNavigationBar,
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it }),
             ) {
-                NavigationBar {
+                NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
                     BottomNavScreen.entries.forEach { item ->
+                        val selected =
+                            currentDestination?.hierarchy?.any { it.route == item.route } == true
+
                         NavigationBarItem(
                             icon = {
                                 Icon(
-                                    imageVector = item.icon,
+                                    imageVector = if (selected) item.selectedIcon else item.unSelectedIcon,
                                     contentDescription = null
                                 )
                             },
-                            selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                            selected = selected,
                             onClick = {
                                 navController.navigate(item.route) {
                                     popUpTo(navController.graph.findStartDestination().id) {
@@ -76,10 +81,9 @@ fun Navigation() {
             moviesScreen { movie ->
                 navController.navigateToDetail(movie.id, false)
             }
-            searchScreen(
-                onMovieClick = { movie -> navController.navigateToDetail(movie.id, true) },
-                onBack = { navController.navigateUp() }
-            )
+            searchScreen { movie ->
+                navController.navigateToDetail(movie.id, true)
+            }
             detailScreen(navController::popBackStack)
         }
     }

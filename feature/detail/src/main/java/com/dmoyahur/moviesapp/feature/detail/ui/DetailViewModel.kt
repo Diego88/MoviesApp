@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.domain.detail.GetMovieByIdUseCase
-import com.dmoyahur.moviesapp.core.ui.Result
-import com.dmoyahur.moviesapp.core.ui.asResult
+import com.dmoyahur.moviesapp.core.ui.model.Result
+import com.dmoyahur.moviesapp.core.ui.model.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted

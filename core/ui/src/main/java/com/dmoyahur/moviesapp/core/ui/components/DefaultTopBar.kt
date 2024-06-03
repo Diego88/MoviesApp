@@ -1,4 +1,4 @@
-package com.dmoyahur.moviesapp.core.ui
+package com.dmoyahur.moviesapp.core.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -10,6 +10,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.dmoyahur.moviesapp.core.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.dmoyahur.moviesapp.core.theme
+package com.dmoyahur.moviesapp.core.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
