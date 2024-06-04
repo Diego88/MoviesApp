@@ -27,6 +27,7 @@ androidxTestRules = "1.5.0"
 appcompat = "1.7.0"
 material = "1.12.0"
 turbine = "1.1.0"
+androidxCompose = "1.6.0"
 
 [libraries]
 # Dependencies of the included build-logic
@@ -72,6 +73,7 @@ androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine"}
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

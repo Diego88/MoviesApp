@@ -67,10 +67,10 @@ class SearchViewModel @Inject constructor(
         ) { query, active, previousSearches, movies ->
             SearchUiState(
                 query = query,
+                active = active,
                 previousSearches = previousSearches.previousSearches,
                 movies = movies.movies,
                 loading = previousSearches.loading,
-                active = active,
                 error = when {
                     previousSearches.error != null -> previousSearches.error
                     query.isEmpty() -> null

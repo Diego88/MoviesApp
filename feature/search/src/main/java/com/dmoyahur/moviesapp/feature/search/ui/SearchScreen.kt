@@ -88,7 +88,7 @@ internal fun SearchScreen(
                 onQueryChange = { onQueryChange(it) },
                 onSearch = { keyboardController?.hide() },
                 active = state.active,
-                onActiveChange = onActiveChange,
+                onActiveChange = { onActiveChange(it) },
                 placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
                 leadingIcon = {
                     Icon(
@@ -120,10 +120,12 @@ internal fun SearchScreen(
                 },
                 modifier = Modifier.padding(top = 16.dp)
             )
-            SearchContent(
-                state = state,
-                onMovieClick = onMovieClick
-            )
+            if (!state.active) {
+                SearchContent(
+                    state = state,
+                    onMovieClick = onMovieClick
+                )
+            }
         }
     }
 }
