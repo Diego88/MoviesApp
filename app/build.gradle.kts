@@ -7,16 +7,13 @@ plugins {
 
 android {
     namespace = "com.dmoyahur.moviesapp"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.dmoyahur.moviesapp"
-        minSdk = 24
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -32,21 +29,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
 
     packaging {
@@ -57,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation(project(":feature:movies"))
     implementation(project(":feature:search"))
     implementation(project(":feature:detail"))
@@ -65,6 +48,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:database"))
     implementation(project(":core:network"))
+    implementation(project(":core:testing"))
     implementation(project(":domain:movies"))
     implementation(project(":domain:search"))
     implementation(project(":domain:detail"))
