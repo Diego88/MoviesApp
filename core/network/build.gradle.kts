@@ -16,8 +16,3 @@ android {
         defaultPropertiesFileName = "secrets.defaults.properties"
     }
 }
-
-dependencies {
-    implementation(project(":data:movies"))
-    implementation(project(":data:search"))
-}
