@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.domain.search.data
 
-import com.dmoyahur.moviesapp.core.testing.MovieMock
+import com.dmoyahur.moviesapp.domain.search.util.MovieMock
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.mockk

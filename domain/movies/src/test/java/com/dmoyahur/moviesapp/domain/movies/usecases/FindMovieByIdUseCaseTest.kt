@@ -1,7 +1,7 @@
 package com.dmoyahur.moviesapp.domain.movies.usecases
 
-import com.dmoyahur.moviesapp.core.testing.MovieMock
 import com.dmoyahur.moviesapp.domain.movies.data.MoviesRepository
+import com.dmoyahur.moviesapp.domain.movies.util.MovieMock
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

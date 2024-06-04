@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.domain.movies.data
 
-import com.dmoyahur.moviesapp.core.testing.MovieMock
+import com.dmoyahur.moviesapp.domain.movies.util.MovieMock
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

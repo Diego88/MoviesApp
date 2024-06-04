@@ -1,7 +1,7 @@
 package com.dmoyahur.moviesapp.domain.search.usecases
 
-import com.dmoyahur.moviesapp.core.testing.MovieMock
 import com.dmoyahur.moviesapp.domain.search.data.SearchRepository
+import com.dmoyahur.moviesapp.domain.search.util.MovieMock
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.domain.detail
 
-import com.dmoyahur.moviesapp.core.testing.MovieMock
+import com.dmoyahur.moviesapp.core.model.MovieBo
 import com.dmoyahur.moviesapp.domain.movies.data.MoviesRepository
 import com.dmoyahur.moviesapp.domain.movies.usecases.FindMovieByIdUseCase
 import com.dmoyahur.moviesapp.domain.search.data.SearchRepository
@@ -16,9 +16,22 @@ import org.junit.Test
 
 class GetMovieByIdUseCaseTest {
 
+    private val movie = MovieBo(
+        id = 1,
+        title = "Movie 1",
+        overview = "Overview 1",
+        popularity = 5_000.0,
+        releaseDate = "",
+        poster = null,
+        backdrop = null,
+        originalTitle = "Movie 1",
+        originalLanguage = "en",
+        voteAverage = 7.0
+    )
+
     @Test
     fun `when invoke is called and fromSearch is false, then return movie from movies repository`() {
-        val expectedMovie = MovieMock.movies.first()
+        val expectedMovie = movie
         val moviesRepository: MoviesRepository = mockk {
             every { findMovieById(any()) } returns flowOf(expectedMovie)
         }
@@ -36,7 +49,7 @@ class GetMovieByIdUseCaseTest {
 
     @Test
     fun `when invoke is called and fromSearch is true, then return movie from search repository`() {
-        val expectedMovie = MovieMock.movies.first()
+        val expectedMovie = movie
         val moviesRepository: MoviesRepository = mockk()
         val searchRepository: SearchRepository = mockk {
             every { findMovieSearchById(any()) } returns flowOf(expectedMovie)
