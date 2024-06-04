@@ -29,9 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,15 +54,16 @@ import kotlin.random.Random
 @Composable
 fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel(),
-    onMovieClick: (MovieBo) -> Unit
+    onMovieClick: (MovieBo) -> Unit,
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle(
+    val state by viewModel.searchUiState.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current
     )
 
     SearchScreen(
         state = state,
         onQueryChange = { viewModel.onQueryChange(it) },
+        onActiveChange = { viewModel.onActiveChange(it) },
         onMovieClick = onMovieClick
     )
 }
@@ -76,10 +74,10 @@ fun SearchRoute(
 internal fun SearchScreen(
     state: SearchUiState,
     onQueryChange: (String) -> Unit,
-    onMovieClick: (MovieBo) -> Unit
+    onActiveChange: (Boolean) -> Unit,
+    onMovieClick: (MovieBo) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    var active by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -89,8 +87,8 @@ internal fun SearchScreen(
                 query = state.query,
                 onQueryChange = { onQueryChange(it) },
                 onSearch = { keyboardController?.hide() },
-                active = active,
-                onActiveChange = { active = it },
+                active = state.active,
+                onActiveChange = onActiveChange,
                 placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
                 leadingIcon = {
                     Icon(
@@ -99,30 +97,31 @@ internal fun SearchScreen(
                     )
                 },
                 trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(id = R.string.search_clear),
-                        modifier = Modifier.clickable {
-                            if (state.query.isEmpty()) {
-                                active = false
-                            } else {
-                                onQueryChange("")
+                    if (state.active) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(id = R.string.search_clear),
+                            modifier = Modifier.clickable {
+                                if (state.query.isEmpty()) {
+                                    onActiveChange(false)
+                                } else {
+                                    onQueryChange("")
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 },
                 colors = SearchBarDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
                 content = {
                     SearchContent(
                         state = state,
-                        isActive = active,
                         onMovieClick = onMovieClick
                     )
-                }
+                },
+                modifier = Modifier.padding(top = 16.dp)
             )
             SearchContent(
                 state = state,
-                isActive = active,
                 onMovieClick = onMovieClick
             )
         }
@@ -132,12 +131,12 @@ internal fun SearchScreen(
 @Composable
 private fun SearchContent(
     state: SearchUiState,
-    isActive: Boolean,
-    onMovieClick: (MovieBo) -> Unit
+    onMovieClick: (MovieBo) -> Unit,
 ) {
     val isMoviesEmpty = state.movies.isEmpty()
     val isPreviousSearchesEmpty = state.previousSearches.isEmpty()
     val isQueryEmpty = state.query.isEmpty()
+    val isActive = state.active
     val shouldShowPlaceHolderScreen =
         (!isActive && isPreviousSearchesEmpty) || (isActive && isQueryEmpty)
     val shouldShowEmptyScreen = isActive && isMoviesEmpty && !isQueryEmpty
@@ -179,7 +178,7 @@ private fun SearchContent(
 private fun EmptyScreen(
     icon: ImageVector,
     @StringRes text: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -209,7 +208,7 @@ private fun SearchList(
     movies: List<MovieBo>,
     onMovieClick: (MovieBo) -> Unit,
     contentPadding: PaddingValues,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -289,6 +288,7 @@ private fun SearchScreenPreview() {
                     )
                 }),
             onQueryChange = {},
+            onActiveChange = {},
             onMovieClick = {}
         )
     }

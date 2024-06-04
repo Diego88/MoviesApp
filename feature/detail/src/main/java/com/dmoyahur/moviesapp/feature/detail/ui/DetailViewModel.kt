@@ -3,9 +3,9 @@ package com.dmoyahur.moviesapp.feature.detail.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.domain.detail.GetMovieByIdUseCase
 import com.dmoyahur.moviesapp.core.ui.model.Result
 import com.dmoyahur.moviesapp.core.ui.model.asResult
+import com.dmoyahur.moviesapp.domain.detail.GetMovieByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,12 +21,12 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getMovieByIdUseCase: GetMovieByIdUseCase
+    getMovieByIdUseCase: GetMovieByIdUseCase,
 ) : ViewModel() {
 
     companion object {
-        private const val MOVIE_ID_ARG = "movieId"
-        private const val FROM_SEARCH_ARG = "fromSearch"
+        const val MOVIE_ID_ARG = "movieId"
+        const val FROM_SEARCH_ARG = "fromSearch"
     }
 
     private val movieId: StateFlow<Int?> =
