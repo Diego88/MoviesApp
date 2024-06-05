@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.dmoyahur.moviesapp.core.database"
+    namespace = "com.dmoyahur.moviesapp.database"
 }
 
 dependencies {

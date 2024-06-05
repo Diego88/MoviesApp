@@ -46,7 +46,7 @@ dependencies {
     implementation(project(":feature:detail"))
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
-    implementation(project(":core:database"))
+    implementation(project(":database"))
     implementation(project(":core:network"))
     implementation(project(":core:testing"))
     implementation(project(":domain:movies"))
