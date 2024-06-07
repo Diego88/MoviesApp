@@ -1,9 +1,9 @@
 package com.dmoyahur.moviesapp.feature.movies.ui
 
 import app.cash.turbine.test
-import com.dmoyahur.moviesapp.core.testing.MovieMock
-import com.dmoyahur.moviesapp.core.testing.testrules.CoroutinesTestRule
-import com.dmoyahur.moviesapp.domain.movies.usecases.GetPopularMoviesUseCase
+import com.dmoyahur.moviesapp.feature.movies.domain.GetPopularMoviesUseCase
+import com.dmoyahur.moviesapp.testShared.MovieMock
+import com.dmoyahur.moviesapp.testShared.testrules.CoroutinesTestRule
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf

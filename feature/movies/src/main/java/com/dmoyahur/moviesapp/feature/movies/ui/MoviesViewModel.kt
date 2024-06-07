@@ -2,9 +2,9 @@ package com.dmoyahur.moviesapp.feature.movies.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.core.ui.model.Result
-import com.dmoyahur.moviesapp.core.ui.model.asResult
-import com.dmoyahur.moviesapp.domain.movies.usecases.GetPopularMoviesUseCase
+import com.dmoyahur.moviesapp.common.ui.model.Result
+import com.dmoyahur.moviesapp.common.ui.model.asResult
+import com.dmoyahur.moviesapp.feature.movies.domain.GetPopularMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

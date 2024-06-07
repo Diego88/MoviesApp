@@ -28,12 +28,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmoyahur.moviesapp.core.model.MovieBo
-import com.dmoyahur.moviesapp.core.ui.components.DefaultTopBar
-import com.dmoyahur.moviesapp.core.ui.components.ErrorScreen
-import com.dmoyahur.moviesapp.core.ui.components.ImageCoil
-import com.dmoyahur.moviesapp.core.ui.components.LoadingIndicator
-import com.dmoyahur.moviesapp.core.ui.components.Screen
+import com.dmoyahur.moviesapp.model.MovieBo
+import com.dmoyahur.moviesapp.common.ui.components.DefaultTopBar
+import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
+import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
+import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
+import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.movies.R
 import kotlin.random.Random
 

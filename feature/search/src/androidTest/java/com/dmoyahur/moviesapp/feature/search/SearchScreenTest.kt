@@ -3,10 +3,10 @@ package com.dmoyahur.moviesapp.feature.search
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.dmoyahur.moviesapp.core.testing.MovieMock
-import com.dmoyahur.moviesapp.core.ui.components.Screen
+import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.search.ui.SearchScreen
 import com.dmoyahur.moviesapp.feature.search.ui.SearchUiState
+import com.dmoyahur.moviesapp.testShared.MovieMock
 import org.junit.Rule
 import org.junit.Test
 

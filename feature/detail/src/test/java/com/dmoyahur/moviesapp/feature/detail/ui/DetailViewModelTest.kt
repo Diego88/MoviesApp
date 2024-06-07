@@ -2,9 +2,9 @@ package com.dmoyahur.moviesapp.feature.detail.ui
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.dmoyahur.moviesapp.core.testing.MovieMock
-import com.dmoyahur.moviesapp.core.testing.testrules.CoroutinesTestRule
-import com.dmoyahur.moviesapp.domain.detail.GetMovieByIdUseCase
+import com.dmoyahur.moviesapp.feature.detail.domain.GetMovieByIdUseCase
+import com.dmoyahur.moviesapp.testShared.MovieMock
+import com.dmoyahur.moviesapp.testShared.testrules.CoroutinesTestRule
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow

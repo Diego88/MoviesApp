@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.feature.search.ui
 
-import com.dmoyahur.moviesapp.core.model.MovieBo
+import com.dmoyahur.moviesapp.model.MovieBo
 
 data class PreviousSearchesState(
     val previousSearches: List<MovieBo> = emptyList(),

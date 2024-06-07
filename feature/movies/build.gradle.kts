@@ -12,16 +12,16 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:model"))
-    implementation(project(":domain:movies"))
+    implementation(project(":model"))
+    implementation(project(":data:repository"))
 
-    testImplementation(project(":core:testing"))
+    testImplementation(project(":testShared"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
 
-    androidTestImplementation(project(":core:testing"))
+    androidTestImplementation(project(":testShared"))
     androidTestImplementation(libs.androidx.compose.ui.test)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

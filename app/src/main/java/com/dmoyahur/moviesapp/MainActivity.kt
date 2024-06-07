@@ -8,7 +8,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.dmoyahur.moviesapp.core.ui.components.Screen
+import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.navigation.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 

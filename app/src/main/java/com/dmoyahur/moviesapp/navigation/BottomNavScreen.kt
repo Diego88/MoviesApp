@@ -7,8 +7,8 @@ import androidx.compose.material.icons.outlined.Movie
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.dmoyahur.moviesapp.R
-import com.dmoyahur.moviesapp.core.ui.icons.CustomIcons
-import com.dmoyahur.moviesapp.core.ui.icons.filled.VideoSearch
+import com.dmoyahur.moviesapp.common.ui.icons.CustomIcons
+import com.dmoyahur.moviesapp.common.ui.icons.filled.VideoSearch
 import com.dmoyahur.moviesapp.feature.movies.navigation.MOVIES_ROUTE
 import com.dmoyahur.moviesapp.feature.search.navigation.SEARCH_ROUTE
 

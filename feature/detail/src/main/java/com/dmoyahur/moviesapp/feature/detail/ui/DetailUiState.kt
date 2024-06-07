@@ -1,6 +1,6 @@
 package com.dmoyahur.moviesapp.feature.detail.ui
 
-import com.dmoyahur.moviesapp.core.model.MovieBo
+import com.dmoyahur.moviesapp.model.MovieBo
 
 data class DetailUiState(
     val movie: MovieBo? = null,

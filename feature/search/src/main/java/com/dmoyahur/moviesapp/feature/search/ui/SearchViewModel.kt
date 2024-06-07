@@ -2,10 +2,10 @@ package com.dmoyahur.moviesapp.feature.search.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dmoyahur.moviesapp.core.ui.model.Result
-import com.dmoyahur.moviesapp.core.ui.model.asResult
-import com.dmoyahur.moviesapp.domain.search.usecases.GetPreviousSearchesUseCase
-import com.dmoyahur.moviesapp.domain.search.usecases.SearchMovieUseCase
+import com.dmoyahur.moviesapp.common.ui.model.Result
+import com.dmoyahur.moviesapp.common.ui.model.asResult
+import com.dmoyahur.moviesapp.feature.search.domain.GetPreviousSearchesUseCase
+import com.dmoyahur.moviesapp.feature.search.domain.SearchMovieUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchMovieUseCase: SearchMovieUseCase,
-    getPreviousSearchesUseCase: GetPreviousSearchesUseCase
+    getPreviousSearchesUseCase: GetPreviousSearchesUseCase,
 ) : ViewModel() {
 
     private val query = MutableStateFlow("")

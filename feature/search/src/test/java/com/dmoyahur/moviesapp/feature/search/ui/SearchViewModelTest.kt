@@ -1,10 +1,10 @@
 package com.dmoyahur.moviesapp.feature.search.ui
 
 import app.cash.turbine.test
-import com.dmoyahur.moviesapp.core.testing.MovieMock
-import com.dmoyahur.moviesapp.core.testing.testrules.CoroutinesTestRule
-import com.dmoyahur.moviesapp.domain.search.usecases.GetPreviousSearchesUseCase
-import com.dmoyahur.moviesapp.domain.search.usecases.SearchMovieUseCase
+import com.dmoyahur.moviesapp.feature.search.domain.GetPreviousSearchesUseCase
+import com.dmoyahur.moviesapp.feature.search.domain.SearchMovieUseCase
+import com.dmoyahur.moviesapp.testShared.MovieMock
+import com.dmoyahur.moviesapp.testShared.testrules.CoroutinesTestRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flow

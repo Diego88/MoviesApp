@@ -4,11 +4,11 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.dmoyahur.moviesapp.core.testing.MovieMock
-import com.dmoyahur.moviesapp.core.ui.components.Screen
+import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.detail.ui.DetailScreen
 import com.dmoyahur.moviesapp.feature.detail.ui.DetailUiState
 import com.dmoyahur.moviesapp.feature.detail.util.DetailConstants
+import com.dmoyahur.moviesapp.testShared.MovieMock
 import org.junit.Rule
 import org.junit.Test
 
