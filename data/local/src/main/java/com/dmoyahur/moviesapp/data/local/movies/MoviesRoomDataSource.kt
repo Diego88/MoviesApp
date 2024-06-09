@@ -1,6 +1,7 @@
 package com.dmoyahur.moviesapp.data.local.movies
 
 import com.dmoyahur.moviesapp.model.MovieBo
+import com.dmoyahur.moviesapp.data.local.LocalQueryHandler.query
 import com.dmoyahur.moviesapp.data.local.movies.mapper.MovieDboMapper
 import com.dmoyahur.moviesapp.data.repository.movies.datasource.MoviesLocalDataSource
 import kotlinx.coroutines.flow.Flow
@@ -12,11 +13,15 @@ class MoviesRoomDataSource @Inject constructor(
 ) : MoviesLocalDataSource {
 
     override val movies: Flow<List<MovieBo>> =
-        moviesDao.getPopularMovies().map { MovieDboMapper.mapToDomain(it) }
+        query { moviesDao.getPopularMovies().map { MovieDboMapper.mapToDomain(it) } }
 
-    override fun findMovieById(id: Int): Flow<MovieBo?> =
-        moviesDao.findMovieById(id).map { movie -> movie?.let { MovieDboMapper.mapToDomain(it) } }
+    override fun findMovieById(id: Int): Flow<MovieBo?> {
+        return query {
+            moviesDao.findMovieById(id)
+                .map { movie -> movie?.let { MovieDboMapper.mapToDomain(it) } }
+        }
+    }
 
     override suspend fun saveMovies(movies: List<MovieBo>) =
-        moviesDao.saveMovies(MovieDboMapper.mapToDatabase(movies))
+        query { moviesDao.saveMovies(MovieDboMapper.mapToDatabase(movies)) }
 }

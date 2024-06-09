@@ -42,4 +42,6 @@ object MovieSearchDboMapper {
             )
         }
     }
+
+    internal fun String.toDatabaseQuery() = "%$this%"
 }

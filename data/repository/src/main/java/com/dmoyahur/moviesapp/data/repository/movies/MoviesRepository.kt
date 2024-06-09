@@ -12,13 +12,14 @@ class MoviesRepository @Inject constructor(
     private val remoteDataSource: MoviesRemoteDataSource,
     private val localDataSource: MoviesLocalDataSource,
 ) {
-    val movies: Flow<List<MovieBo>> =
-        localDataSource.movies.onEach { localMovies ->
-            if (localMovies.isEmpty()) {
-                val remoteMovies = remoteDataSource.fetchPopularMovies()
-                localDataSource.saveMovies(remoteMovies)
-            }
+    val movies: Flow<List<MovieBo>> = localDataSource.movies.onEach { localMovies ->
+        try {
+            val remoteMovies = remoteDataSource.fetchPopularMovies()
+            localDataSource.saveMovies(remoteMovies)
+        } catch (exception: Exception) {
+            if (localMovies.isEmpty()) throw exception
         }
+    }
 
     fun findMovieById(id: Int): Flow<MovieBo> = localDataSource.findMovieById(id).filterNotNull()
 }

@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Named
@@ -34,7 +35,7 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideInterceptor(@Named("apiKey") apiKey: String): Interceptor = Interceptor { chain ->
+    fun provideApiKeyInterceptor(@Named("apiKey") apiKey: String): Interceptor = Interceptor { chain ->
         chain.proceed(
             chain.request()
                 .newBuilder()
@@ -51,9 +52,15 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(interceptor: Interceptor): OkHttpClient =
+    fun provideOkHttpClient(apiKeyInterceptor: Interceptor): OkHttpClient =
         OkHttpClient.Builder()
-            .addInterceptor(interceptor)
+            .addInterceptor(apiKeyInterceptor)
+            .addInterceptor(HttpLoggingInterceptor()
+                .apply {
+                    if (BuildConfig.DEBUG) {
+                        setLevel(HttpLoggingInterceptor.Level.BODY)
+                    }
+                })
             .build()
 
     @Provides

@@ -9,5 +9,7 @@ interface SearchLocalDataSource {
 
     fun findMovieSearchById(id: Int): Flow<MovieBo?>
 
+    fun findMovieSearchByQuery(query: String): Flow<List<MovieBo>>
+
     suspend fun saveMovieSearch(movie: MovieBo)
 }

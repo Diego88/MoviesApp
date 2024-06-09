@@ -29,18 +29,21 @@ class SearchViewModel @Inject constructor(
     private val query = MutableStateFlow("")
     private val active = MutableStateFlow(false)
 
-    private val previousSearchesState: StateFlow<PreviousSearchesState> =
+    //private val previousSearchesState: StateFlow<PreviousSearchesState> =
+    private val previousSearchesState: Flow<PreviousSearchesState> =
         getPreviousSearchesUseCase()
             .asResult()
             .map { result ->
-                when(result) {
+                when (result) {
                     is Result.Success -> PreviousSearchesState(previousSearches = result.data)
                     is Result.Error -> PreviousSearchesState(error = result.exception)
                     is Result.Loading -> PreviousSearchesState(loading = true)
                 }
-            }.stateInViewModelScope(initialValue = PreviousSearchesState(loading = true))
+            }
+    //.stateInViewModelScope(initialValue = PreviousSearchesState(loading = true))
 
-    private val moviesState: StateFlow<MoviesState> = query
+    //private val moviesState: StateFlow<MoviesState> = query
+    private val moviesState: Flow<MoviesState> = query
         .flatMapLatest {
             if (it.isEmpty()) {
                 flowOf(emptyList())
@@ -50,13 +53,13 @@ class SearchViewModel @Inject constructor(
         }
         .asResult()
         .map { result ->
-            when(result) {
+            when (result) {
                 is Result.Success -> MoviesState(movies = result.data)
                 is Result.Error -> MoviesState(error = result.exception)
-                is Result.Loading -> MoviesState(loading = true)
+                is Result.Loading -> MoviesState()
             }
         }
-        .stateInViewModelScope(initialValue = MoviesState())
+    //.stateInViewModelScope(initialValue = MoviesState())
 
     val searchUiState: StateFlow<SearchUiState> =
         combine(
@@ -78,7 +81,7 @@ class SearchViewModel @Inject constructor(
                     else -> null
                 }
             )
-        }.stateInViewModelScope(initialValue = SearchUiState(loading = true))
+        }.stateInViewModelScope(initialValue = SearchUiState())
 
     fun onQueryChange(query: String) {
         this.query.value = query

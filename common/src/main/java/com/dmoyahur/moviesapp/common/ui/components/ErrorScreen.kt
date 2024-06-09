@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dmoyahur.moviesapp.common.R
+import com.dmoyahur.moviesapp.model.error.AsyncException
 
 @Composable
 fun ErrorScreen(error: Throwable?, modifier: Modifier = Modifier) {
@@ -34,11 +35,20 @@ fun ErrorScreen(error: Throwable?, modifier: Modifier = Modifier) {
                 modifier = Modifier.size(64.dp)
             )
             Text(
-                text = error?.localizedMessage ?: stringResource(id = R.string.generic_error),
+                text = getErrorMessage(error),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
             )
         }
+    }
+}
+
+@Composable
+private fun getErrorMessage(error: Throwable?): String {
+    return when (error) {
+        is AsyncException.ConnectionError -> stringResource(id = R.string.connection_error)
+        is AsyncException.DatabaseError -> stringResource(id = R.string.database_error)
+        else -> stringResource(id = R.string.generic_error)
     }
 }
 
