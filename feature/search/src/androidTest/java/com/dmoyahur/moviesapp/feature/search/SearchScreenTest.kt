@@ -4,11 +4,15 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.feature.search.ui.PreviousSearchesUiState
+import com.dmoyahur.moviesapp.feature.search.ui.SearchResultUiState
 import com.dmoyahur.moviesapp.feature.search.ui.SearchScreen
-import com.dmoyahur.moviesapp.feature.search.ui.SearchUiState
+import com.dmoyahur.moviesapp.model.error.AsyncException
 import com.dmoyahur.moviesapp.testShared.MovieMock
+import com.dmoyahur.moviesapp.testShared.utils.onNodeWithText
 import org.junit.Rule
 import org.junit.Test
+import com.dmoyahur.moviesapp.common.R as commonRes
 
 class SearchScreenTest {
 
@@ -17,80 +21,135 @@ class SearchScreenTest {
 
     @Test
     fun givenEmptyPreviousSearches_PlaceHolderContentIsShown(): Unit = with(composeTestRule) {
-        val searchUiState = SearchUiState(previousSearches = emptyList())
+        val previousSearchesUiState =
+            PreviousSearchesUiState.Success(previousSearches = emptyList())
+        val searchesUiState = SearchResultUiState.Success(emptyList())
         setContent {
             Screen {
-                SearchScreen(searchUiState, {}, {}, {})
+                SearchScreen(
+                    previousSearchesUiState,
+                    searchesUiState,
+                    "",
+                    false,
+                    {},
+                    {},
+                    {}
+                )
             }
         }
 
-        onNodeWithText("Type the movie to search").assertIsDisplayed()
+        onNodeWithText(R.string.search_content_placeholder).assertIsDisplayed()
     }
 
     @Test
     fun givenPreviousSearches_PreviousSearchesAreShown(): Unit = with(composeTestRule) {
-        val movies = MovieMock.movies.take(2)
-        val searchUiState = SearchUiState(previousSearches = movies)
-        setContent {
-            Screen {
-                SearchScreen(searchUiState, {}, {}, {})
-            }
-        }
-
-        onNodeWithText("Previous searches").assertIsDisplayed()
-        onNodeWithText("Movie 1").assertIsDisplayed()
-        onNodeWithText("Movie 2").assertIsDisplayed()
-    }
-
-    @Test
-    fun givenAMovieSearchWithResults_MoviesResultAreShown(): Unit = with(composeTestRule) {
         val movies = MovieMock.movies
-        val searchUiState = SearchUiState(
-            query = "Movie",
-            active = true,
-            movies = movies
-        )
+        val previousSearchesUiState = PreviousSearchesUiState.Success(movies)
+        val searchesUiState = SearchResultUiState.Success(emptyList())
         setContent {
             Screen {
-                SearchScreen(searchUiState, {}, {}, {})
+                SearchScreen(
+                    previousSearchesUiState,
+                    searchesUiState,
+                    "",
+                    false,
+                    {},
+                    {},
+                    {}
+                )
             }
         }
 
-        onNodeWithText("Main results").assertIsDisplayed()
-        onNodeWithText("Movie 1").assertIsDisplayed()
-        onNodeWithText("Movie 2").assertIsDisplayed()
+        onNodeWithText(R.string.search_previous_searches).assertIsDisplayed()
+        onNodeWithText(movies[0].title).assertIsDisplayed()
+        onNodeWithText(movies[1].title).assertIsDisplayed()
     }
 
     @Test
-    fun givenAnEmptyMovieSearch_NoResultAreFoundIsShown(): Unit = with(composeTestRule) {
-        val searchUiState = SearchUiState(
-            query = "Movii",
-            active = true,
-            movies = emptyList()
-        )
+    fun givenAnEmptyQuery_PlaceHolderContentIsShown(): Unit = with(composeTestRule) {
+        val previousSearchesUiState = PreviousSearchesUiState.Success(MovieMock.movies)
+        val searchesUiState = SearchResultUiState.EmptyQuery
         setContent {
             Screen {
-                SearchScreen(searchUiState, {}, {}, {})
+                SearchScreen(
+                    previousSearchesUiState,
+                    searchesUiState,
+                    "",
+                    true,
+                    {},
+                    {},
+                    {}
+                )
             }
         }
 
-        onNodeWithText("No results found").assertIsDisplayed()
+        onNodeWithText(R.string.search_content_placeholder).assertIsDisplayed()
     }
 
     @Test
-    fun givenASearchError_ErrorScreenIsShown(): Unit = with(composeTestRule) {
-        val error = "Search error"
-        val searchUiState = SearchUiState(
-            query = "Movie",
-            active = true,
-            error = Throwable(error)
-        )
+    fun givenANonEmptySearchResults_ResultAreShown(): Unit = with(composeTestRule) {
+        val movies = MovieMock.movies
+        val previousSearchesUiState = PreviousSearchesUiState.Success(emptyList())
+        val searchesUiState = SearchResultUiState.Success(movies)
         setContent {
             Screen {
-                SearchScreen(searchUiState, {}, {}, {})
+                SearchScreen(
+                    previousSearchesUiState,
+                    searchesUiState,
+                    "Movie",
+                    true,
+                    {},
+                    {},
+                    {}
+                )
             }
         }
 
-        onNodeWithText(error).assertIsDisplayed()
+        onNodeWithText(R.string.search_main_results).assertIsDisplayed()
+        onNodeWithText(movies[0].title).assertIsDisplayed()
+        onNodeWithText(movies[1].title).assertIsDisplayed()
+    }
+
+    @Test
+    fun givenAnEmptySearchResult_NoResultAreFoundIsShown(): Unit = with(composeTestRule) {
+        val previousSearchesUiState = PreviousSearchesUiState.Success(emptyList())
+        val searchesUiState = SearchResultUiState.Success(emptyList())
+        setContent {
+            Screen {
+                SearchScreen(
+                    previousSearchesUiState,
+                    searchesUiState,
+                    "Movii",
+                    true,
+                    {},
+                    {},
+                    {}
+                )
+            }
+        }
+
+        onNodeWithText(R.string.search_no_results).assertIsDisplayed()
+    }
+
+    @Test
+    fun givenASearchResultError_ErrorScreenIsShown(): Unit = with(composeTestRule) {
+        val previousSearchesUiState = PreviousSearchesUiState.Success(emptyList())
+        val searchesUiState =
+            SearchResultUiState.Error(AsyncException.ConnectionError("Error connecting with host"))
+        setContent {
+            Screen {
+                SearchScreen(
+                    previousSearchesUiState,
+                    searchesUiState,
+                    "Movie",
+                    true,
+                    {},
+                    {},
+                    {}
+                )
+            }
+        }
+
+        onNodeWithText(commonRes.string.connection_error).assertIsDisplayed()
     }
 }

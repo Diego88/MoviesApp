@@ -19,13 +19,13 @@ class MoviesViewModel @Inject constructor(getPopularMoviesUseCase: GetPopularMov
         .asResult()
         .map { result ->
             when (result) {
-                is Result.Success -> MoviesUiState(movies = result.data)
-                is Result.Error -> MoviesUiState(error = result.exception)
-                else -> MoviesUiState(loading = true)
+                is Result.Success -> MoviesUiState.Success(result.data)
+                is Result.Error -> MoviesUiState.Error(result.exception)
+                else -> MoviesUiState.Loading
             }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = MoviesUiState(loading = true)
+            initialValue = MoviesUiState.Loading
         )
 }

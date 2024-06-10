@@ -28,13 +28,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.common.ui.components.DefaultTopBar
 import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.movies.R
+import com.dmoyahur.moviesapp.model.MovieBo
 import kotlin.random.Random
 
 @Composable
@@ -60,19 +60,15 @@ internal fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { padding ->
-        if (state.error != null) {
-            ErrorScreen(error = state.error)
-        } else {
-            MoviesList(
+        when (state) {
+            is MoviesUiState.Success -> MoviesList(
                 movies = state.movies,
                 contentPadding = padding,
                 onMovieClick = onMovieClick,
                 modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 80.dp)
             )
-
-            if (state.loading) {
-                LoadingIndicator()
-            }
+            is MoviesUiState.Error -> ErrorScreen(state.exception)
+            is MoviesUiState.Loading -> LoadingIndicator()
         }
     }
 }
@@ -126,7 +122,7 @@ private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
 private fun MoviesScreenPreview() {
     Screen {
         MoviesScreen(
-            state = MoviesUiState(
+            state = MoviesUiState.Success(
                 movies = (1..10).map {
                     MovieBo(
                         id = it,

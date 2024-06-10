@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.androidx.test.rules)
     implementation(libs.hilt.android.testing)
     implementation(libs.kotlinx.coroutines.test)
-
-    debugImplementation(libs.junit)
+    implementation(libs.junit)
+    implementation(libs.androidx.compose.ui.test)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

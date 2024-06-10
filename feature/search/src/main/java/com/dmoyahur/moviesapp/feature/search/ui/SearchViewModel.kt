@@ -1,18 +1,18 @@
 package com.dmoyahur.moviesapp.feature.search.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.common.ui.model.Result
 import com.dmoyahur.moviesapp.common.ui.model.asResult
 import com.dmoyahur.moviesapp.feature.search.domain.GetPreviousSearchesUseCase
 import com.dmoyahur.moviesapp.feature.search.domain.SearchMovieUseCase
+import com.dmoyahur.moviesapp.model.MovieBo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -22,80 +22,58 @@ import javax.inject.Inject
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchMovieUseCase: SearchMovieUseCase,
     getPreviousSearchesUseCase: GetPreviousSearchesUseCase,
+    private val searchMovieUseCase: SearchMovieUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val query = MutableStateFlow("")
-    private val active = MutableStateFlow(false)
+    companion object {
+        private const val SEARCH_QUERY = "searchQuery"
+        private const val SEARCH_ACTIVE = "searchActive"
+    }
 
-    //private val previousSearchesState: StateFlow<PreviousSearchesState> =
-    private val previousSearchesState: Flow<PreviousSearchesState> =
+    val query = savedStateHandle.getStateFlow(key = SEARCH_QUERY, initialValue = "")
+    val active = savedStateHandle.getStateFlow(key = SEARCH_ACTIVE, initialValue = false)
+
+    val previousSearchesUiState: StateFlow<PreviousSearchesUiState> =
         getPreviousSearchesUseCase()
             .asResult()
             .map { result ->
                 when (result) {
-                    is Result.Success -> PreviousSearchesState(previousSearches = result.data)
-                    is Result.Error -> PreviousSearchesState(error = result.exception)
-                    is Result.Loading -> PreviousSearchesState(loading = true)
+                    is Result.Success -> PreviousSearchesUiState.Success(result.data)
+                    is Result.Error -> PreviousSearchesUiState.Error(result.exception)
+                    is Result.Loading -> PreviousSearchesUiState.Loading
                 }
             }
-    //.stateInViewModelScope(initialValue = PreviousSearchesState(loading = true))
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = PreviousSearchesUiState.Loading
+            )
 
-    //private val moviesState: StateFlow<MoviesState> = query
-    private val moviesState: Flow<MoviesState> = query
-        .flatMapLatest {
+    val searchResultUiState: StateFlow<SearchResultUiState> =
+        query.flatMapLatest {
             if (it.isEmpty()) {
-                flowOf(emptyList())
+                flowOf(SearchResultUiState.EmptyQuery)
             } else {
                 searchMovieUseCase(it)
+                    .map<List<MovieBo>, SearchResultUiState> { movies ->
+                        SearchResultUiState.Success(movies)
+                    }.catch { exception ->
+                        emit(SearchResultUiState.Error(exception))
+                    }
             }
-        }
-        .asResult()
-        .map { result ->
-            when (result) {
-                is Result.Success -> MoviesState(movies = result.data)
-                is Result.Error -> MoviesState(error = result.exception)
-                is Result.Loading -> MoviesState()
-            }
-        }
-    //.stateInViewModelScope(initialValue = MoviesState())
-
-    val searchUiState: StateFlow<SearchUiState> =
-        combine(
-            query,
-            active,
-            previousSearchesState,
-            moviesState
-        ) { query, active, previousSearches, movies ->
-            SearchUiState(
-                query = query,
-                active = active,
-                previousSearches = previousSearches.previousSearches,
-                movies = movies.movies,
-                loading = previousSearches.loading,
-                error = when {
-                    previousSearches.error != null -> previousSearches.error
-                    query.isEmpty() -> null
-                    movies.error != null -> movies.error
-                    else -> null
-                }
-            )
-        }.stateInViewModelScope(initialValue = SearchUiState())
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = SearchResultUiState.Loading
+        )
 
     fun onQueryChange(query: String) {
-        this.query.value = query
+        savedStateHandle[SEARCH_QUERY] = query
     }
 
     fun onActiveChange(active: Boolean) {
-        this.active.value = active
-    }
-
-    private fun <T> Flow<T>.stateInViewModelScope(initialValue: T): StateFlow<T> {
-        return this.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = initialValue
-        )
+        savedStateHandle[SEARCH_ACTIVE] = active
     }
 }

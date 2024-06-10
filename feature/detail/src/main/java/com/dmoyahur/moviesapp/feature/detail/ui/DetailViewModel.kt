@@ -48,14 +48,14 @@ class DetailViewModel @Inject constructor(
         .asResult()
         .map { result ->
             when (result) {
-                is Result.Success -> DetailUiState(movie = result.data)
-                is Result.Error -> DetailUiState(error = result.exception)
-                is Result.Loading -> DetailUiState(loading = true)
+                is Result.Success -> DetailUiState.Success(result.data)
+                is Result.Error -> DetailUiState.Error(result.exception)
+                is Result.Loading -> DetailUiState.Loading
             }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = DetailUiState(loading = true)
+            initialValue = DetailUiState.Loading
         )
 }

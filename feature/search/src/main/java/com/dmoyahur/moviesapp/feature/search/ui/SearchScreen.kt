@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -42,13 +43,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.search.R
 import com.dmoyahur.moviesapp.feature.search.util.header
+import com.dmoyahur.moviesapp.model.MovieBo
 import kotlin.random.Random
 
 @Composable
@@ -56,12 +57,21 @@ fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel(),
     onMovieClick: (MovieBo) -> Unit,
 ) {
-    val state by viewModel.searchUiState.collectAsStateWithLifecycle(
-        lifecycleOwner = LocalLifecycleOwner.current
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    val previousSearchesUiState by viewModel.previousSearchesUiState.collectAsStateWithLifecycle(
+        lifeCycleOwner
     )
+    val searchResultUiState by viewModel.searchResultUiState.collectAsStateWithLifecycle(
+        lifeCycleOwner
+    )
+    val query by viewModel.query.collectAsStateWithLifecycle(lifeCycleOwner)
+    val active by viewModel.active.collectAsStateWithLifecycle(lifeCycleOwner)
 
     SearchScreen(
-        state = state,
+        previousSearchesUiState = previousSearchesUiState,
+        searchResultUiState = searchResultUiState,
+        query = query,
+        active = active,
         onQueryChange = { viewModel.onQueryChange(it) },
         onActiveChange = { viewModel.onActiveChange(it) },
         onMovieClick = onMovieClick
@@ -69,61 +79,117 @@ fun SearchRoute(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchScreen(
-    state: SearchUiState,
+    previousSearchesUiState: PreviousSearchesUiState,
+    searchResultUiState: SearchResultUiState,
+    query: String,
+    active: Boolean,
     onQueryChange: (String) -> Unit,
     onActiveChange: (Boolean) -> Unit,
     onMovieClick: (MovieBo) -> Unit,
 ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            SearchTopBar(
+                state = searchResultUiState,
+                query = query,
+                active = active,
+                onQueryChange = onQueryChange,
+                onActiveChange = onActiveChange,
+                onMovieClick = onMovieClick,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    ) { padding ->
+        PreviousSearchesContent(
+            state = previousSearchesUiState,
+            onMovieClick = onMovieClick,
+            modifier = Modifier.padding(padding)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchTopBar(
+    state: SearchResultUiState,
+    query: String,
+    active: Boolean,
+    onQueryChange: (String) -> Unit,
+    onActiveChange: (Boolean) -> Unit,
+    onMovieClick: (MovieBo) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            SearchBar(
-                query = state.query,
-                onQueryChange = { onQueryChange(it) },
-                onSearch = { keyboardController?.hide() },
-                active = state.active,
-                onActiveChange = { onActiveChange(it) },
-                placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(id = R.string.search_placeholder)
-                    )
-                },
-                trailingIcon = {
-                    if (state.active) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = stringResource(id = R.string.search_clear),
-                            modifier = Modifier.clickable {
-                                if (state.query.isEmpty()) {
-                                    onActiveChange(false)
-                                } else {
-                                    onQueryChange("")
-                                }
-                            }
-                        )
-                    }
-                },
-                colors = SearchBarDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
-                content = {
-                    SearchContent(
-                        state = state,
-                        onMovieClick = onMovieClick
-                    )
-                },
-                modifier = Modifier.padding(top = 16.dp)
+    SearchBar(
+        query = query,
+        onQueryChange = { onQueryChange(it) },
+        onSearch = { keyboardController?.hide() },
+        active = active,
+        onActiveChange = { onActiveChange(it) },
+        placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = stringResource(id = R.string.search_placeholder)
             )
-            if (!state.active) {
+        },
+        trailingIcon = {
+            if (active) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = R.string.search_clear),
+                    modifier = Modifier.clickable {
+                        if (query.isEmpty()) {
+                            onActiveChange(false)
+                        } else {
+                            onQueryChange("")
+                        }
+                    }
+                )
+            }
+        },
+        shape = RectangleShape,
+        colors = SearchBarDefaults.colors(containerColor = MaterialTheme.colorScheme.background),
+        content = {
+            if (active) {
                 SearchContent(
                     state = state,
                     onMovieClick = onMovieClick
+                )
+            }
+        },
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun PreviousSearchesContent(
+    state: PreviousSearchesUiState,
+    onMovieClick: (MovieBo) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (state) {
+        is PreviousSearchesUiState.Error -> ErrorScreen(error = state.exception)
+        PreviousSearchesUiState.Loading -> LoadingIndicator()
+        is PreviousSearchesUiState.Success -> {
+            if (state.isEmpty()) {
+                EmptyScreen(icon = Icons.Default.Search, text = R.string.search_content_placeholder)
+            } else {
+                SearchList(
+                    title = stringResource(R.string.search_previous_searches),
+                    movies = state.previousSearches,
+                    onMovieClick = onMovieClick,
+                    contentPadding = PaddingValues(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 16.dp,
+                        bottom = 128.dp
+                    ),
+                    modifier = modifier
                 )
             }
         }
@@ -132,47 +198,33 @@ internal fun SearchScreen(
 
 @Composable
 private fun SearchContent(
-    state: SearchUiState,
+    state: SearchResultUiState,
     onMovieClick: (MovieBo) -> Unit,
 ) {
-    val isMoviesEmpty = state.movies.isEmpty()
-    val isPreviousSearchesEmpty = state.previousSearches.isEmpty()
-    val isQueryEmpty = state.query.isEmpty()
-    val isActive = state.active
-    val shouldShowPlaceHolderScreen =
-        (!isActive && isPreviousSearchesEmpty) || (isActive && isQueryEmpty)
-    val shouldShowEmptyScreen = isActive && isMoviesEmpty && !isQueryEmpty
-
-    if (state.error != null) {
-        ErrorScreen(error = state.error)
-    } else {
-        if (shouldShowPlaceHolderScreen) {
-            EmptyScreen(icon = Icons.Default.Search, text = R.string.search_content_placeholder)
-        } else if (shouldShowEmptyScreen) {
-            EmptyScreen(icon = Icons.Default.SearchOff, text = R.string.search_no_results)
-        } else {
-            SearchList(
-                title = stringResource(
-                    id = if (isActive) {
-                        R.string.search_main_results
-                    } else {
-                        R.string.search_previous_searches
-                    }
-                ),
-                movies = if (isActive) state.movies else state.previousSearches,
-                onMovieClick = onMovieClick,
-                contentPadding = PaddingValues(
-                    start = 8.dp,
-                    end = 8.dp,
-                    top = 16.dp,
-                    bottom = 128.dp
+    when (state) {
+        is SearchResultUiState.EmptyQuery -> EmptyScreen(
+            icon = Icons.Default.Search,
+            text = R.string.search_content_placeholder
+        )
+        is SearchResultUiState.Success -> {
+            if (state.isEmpty()) {
+                EmptyScreen(icon = Icons.Default.SearchOff, text = R.string.search_no_results)
+            } else {
+                SearchList(
+                    title = stringResource(R.string.search_main_results),
+                    movies = state.searchResult,
+                    onMovieClick = onMovieClick,
+                    contentPadding = PaddingValues(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 16.dp,
+                        bottom = 128.dp
+                    )
                 )
-            )
+            }
         }
-
-        if (state.loading) {
-            LoadingIndicator()
-        }
+        is SearchResultUiState.Error -> ErrorScreen(error = state.exception)
+        SearchResultUiState.Loading -> Unit
     }
 }
 
@@ -273,9 +325,9 @@ private fun EmptyScreenPreview() {
 private fun SearchScreenPreview() {
     Screen {
         SearchScreen(
-            state = SearchUiState(
-                query = "Movie",
-                movies = (1..10).map {
+            previousSearchesUiState = PreviousSearchesUiState.Success(emptyList()),
+            searchResultUiState = SearchResultUiState.Success(
+                searchResult = (1..10).map {
                     MovieBo(
                         id = it,
                         title = "Movie $it",
@@ -289,6 +341,8 @@ private fun SearchScreenPreview() {
                         voteAverage = it / 10.0
                     )
                 }),
+            query = "Movie",
+            active = true,
             onQueryChange = {},
             onActiveChange = {},
             onMovieClick = {}

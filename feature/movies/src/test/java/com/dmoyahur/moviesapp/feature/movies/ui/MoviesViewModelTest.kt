@@ -25,8 +25,8 @@ class MoviesViewModelTest {
         val viewModel = MoviesViewModel(getPopularMoviesUseCase)
 
         viewModel.state.test {
-            assertEquals(MoviesUiState(loading = true), awaitItem())
-            assertEquals(MoviesUiState(movies = expectedMovies), awaitItem())
+            assertEquals(MoviesUiState.Loading, awaitItem())
+            assertEquals(MoviesUiState.Success(movies = expectedMovies), awaitItem())
         }
     }
 }

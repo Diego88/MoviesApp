@@ -30,13 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.common.ui.components.DefaultTopBar
 import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
+import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.detail.R
 import com.dmoyahur.moviesapp.feature.detail.util.DetailConstants
+import com.dmoyahur.moviesapp.model.MovieBo
 
 @Composable
 fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
@@ -56,22 +57,19 @@ internal fun DetailScreen(state: DetailUiState, onBack: () -> Unit) {
     Scaffold(
         topBar = {
             DefaultTopBar(
-                title = state.movie?.title ?: "",
+                title = (state as? DetailUiState.Success)?.movie?.title ?: "",
                 scrollBehavior = scrollBehavior,
                 onBack = onBack
             )
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { padding ->
-        if (state.error != null) {
-            ErrorScreen(error = state.error)
-        } else {
-            state.movie?.let {
-                MovieDetail(
-                    movie = it,
-                    modifier = Modifier.padding(padding)
-                )
+        when (state) {
+            is DetailUiState.Success -> {
+                MovieDetail(movie = state.movie, modifier = Modifier.padding(padding))
             }
+            is DetailUiState.Error -> ErrorScreen(state.exception)
+            is DetailUiState.Loading -> LoadingIndicator()
         }
     }
 }
@@ -89,9 +87,12 @@ private fun MovieDetail(movie: MovieBo, modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .aspectRatio(16 / 9f)
             )
-            Text(text = movie.overview, modifier = Modifier
-                .padding(16.dp)
-                .testTag(DetailConstants.OVERVIEW_TAG))
+            Text(
+                text = movie.overview,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .testTag(DetailConstants.OVERVIEW_TAG)
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,7 +103,6 @@ private fun MovieDetail(movie: MovieBo, modifier: Modifier = Modifier) {
                     name = stringResource(id = R.string.detail_original_language),
                     value = movie.originalLanguage,
                     modifier = Modifier.testTag(DetailConstants.ORIGINAL_LANGUAGE_TAG)
-                    
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 MovieDetailProperty(
@@ -147,7 +147,7 @@ private fun MovieDetailProperty(name: String, value: String, modifier: Modifier 
 private fun DetailScreenPreview() {
     Screen {
         DetailScreen(
-            state = DetailUiState(
+            state = DetailUiState.Success(
                 movie = MovieBo(
                     id = 1,
                     title = "Movie",

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search_placeholder">Search</string>
+    <string name="search_placeholder">Search movie</string>
     <string name="search_clear">Clear</string>
     <string name="search_previous_searches">Previous searches</string>
     <string name="search_main_results">Main results</string>

@@ -26,14 +26,6 @@ class SearchRepository @Inject constructor(
             }
         }.filterNotNull()
 
-    suspend fun searchMovie(query: String): Flow<List<MovieBo>> {
-        return try {
-            val remoteMovies = remoteDataSource.searchMovie(query)
-            flow { emit(remoteMovies) }
-        } catch (exception: Exception) {
-            localDataSource.findMovieSearchByQuery(query).onEach { localMovies ->
-                if (localMovies.isEmpty()) throw exception
-            }
-        }
-    }
+    suspend fun searchMovie(query: String): Flow<List<MovieBo>> =
+        flow { emit(remoteDataSource.searchMovie(query)) }
 }

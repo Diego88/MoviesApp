@@ -3,14 +3,15 @@ package com.dmoyahur.moviesapp.feature.detail
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.detail.ui.DetailScreen
 import com.dmoyahur.moviesapp.feature.detail.ui.DetailUiState
 import com.dmoyahur.moviesapp.feature.detail.util.DetailConstants
 import com.dmoyahur.moviesapp.testShared.MovieMock
+import com.dmoyahur.moviesapp.testShared.utils.onNodeWithText
 import org.junit.Rule
 import org.junit.Test
+import com.dmoyahur.moviesapp.common.R as commonRes
 
 class DetailScreenTest {
 
@@ -20,10 +21,9 @@ class DetailScreenTest {
     @Test
     fun givenAMovie_MovieDetailIsShown(): Unit = with(composeTestRule) {
         val movie = MovieMock.movies.first()
-
         setContent {
             Screen {
-                DetailScreen(state = DetailUiState(movie = movie), onBack = {})
+                DetailScreen(state = DetailUiState.Success(movie), onBack = {})
             }
         }
 
@@ -39,10 +39,10 @@ class DetailScreenTest {
     fun givenAnError_ErrorScreenIsShown(): Unit = with(composeTestRule) {
         setContent {
             Screen {
-                DetailScreen(state = DetailUiState(error = Throwable()), onBack = {})
+                DetailScreen(state = DetailUiState.Error(Throwable()), onBack = {})
             }
         }
 
-        onNodeWithText("An error occurred").assertIsDisplayed()
+        onNodeWithText(commonRes.string.generic_error).assertIsDisplayed()
     }
 }
