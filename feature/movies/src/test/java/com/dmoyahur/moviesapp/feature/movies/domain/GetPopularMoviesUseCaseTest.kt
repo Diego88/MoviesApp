@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,18 +42,13 @@ class GetPopularMoviesUseCaseTest {
     }
 
     @Test
-    fun `when invoke fails, then throws exception`() {
+    fun `when invoke fails, then throw exception`() {
         val expectedException =
             AsyncException.UnknownError("Unknown error", IllegalStateException("Unknown error"))
         coEvery { repository.movies } throws expectedException
 
-        var exception: Exception? = null
-        try {
-            getPopularMoviesUseCase()
-        } catch (e: Exception) {
-            exception = e
+        assertThrows(expectedException.debugMessage, expectedException::class.java) {
+            runBlocking { getPopularMoviesUseCase() }
         }
-
-        assertEquals(expectedException, exception)
     }
 }

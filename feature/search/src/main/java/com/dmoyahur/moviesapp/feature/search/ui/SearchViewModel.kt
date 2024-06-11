@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.common.ui.model.Result
 import com.dmoyahur.moviesapp.common.ui.model.asResult
+import com.dmoyahur.moviesapp.feature.search.domain.DeleteMovieSearchUseCase
 import com.dmoyahur.moviesapp.feature.search.domain.GetPreviousSearchesUseCase
 import com.dmoyahur.moviesapp.feature.search.domain.SearchMovieUseCase
 import com.dmoyahur.moviesapp.model.MovieBo
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -24,6 +26,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     getPreviousSearchesUseCase: GetPreviousSearchesUseCase,
     private val searchMovieUseCase: SearchMovieUseCase,
+    private val deleteMovieSearchUseCase: DeleteMovieSearchUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -75,5 +78,11 @@ class SearchViewModel @Inject constructor(
 
     fun onActiveChange(active: Boolean) {
         savedStateHandle[SEARCH_ACTIVE] = active
+    }
+
+    fun onMovieDelete(movie: MovieBo) {
+        viewModelScope.launch {
+            deleteMovieSearchUseCase(movie.id)
+        }
     }
 }

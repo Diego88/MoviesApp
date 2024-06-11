@@ -47,7 +47,7 @@ class DetailViewModelTest {
     @Test
     fun `when view model is created, then call get movie by id`() = runTest {
         val expectedMovie = MovieMock.movies.first()
-        every { getMovieByIdUseCase(any(), any()) } returns flowOf(expectedMovie)
+        every { getMovieByIdUseCase(1, false) } returns flowOf(expectedMovie)
 
         viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
         val viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)

@@ -47,7 +47,6 @@ fun ErrorScreen(error: Throwable?, modifier: Modifier = Modifier) {
 private fun getErrorMessage(error: Throwable?): String {
     return when (error) {
         is AsyncException.ConnectionError -> stringResource(id = R.string.connection_error)
-        is AsyncException.DatabaseError -> stringResource(id = R.string.database_error)
         else -> stringResource(id = R.string.generic_error)
     }
 }

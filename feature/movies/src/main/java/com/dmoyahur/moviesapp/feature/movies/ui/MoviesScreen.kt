@@ -65,7 +65,7 @@ internal fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit)
                 movies = state.movies,
                 contentPadding = padding,
                 onMovieClick = onMovieClick,
-                modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 80.dp)
+                modifier = Modifier.padding(start = 4.dp, end = 4.dp, bottom = 100.dp)
             )
             is MoviesUiState.Error -> ErrorScreen(state.exception)
             is MoviesUiState.Loading -> LoadingIndicator()
@@ -81,7 +81,7 @@ private fun MoviesList(
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(128.dp),
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),

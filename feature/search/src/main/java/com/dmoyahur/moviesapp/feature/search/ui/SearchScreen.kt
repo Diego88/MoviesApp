@@ -2,8 +2,10 @@ package com.dmoyahur.moviesapp.feature.search.ui
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -74,7 +78,8 @@ fun SearchRoute(
         active = active,
         onQueryChange = { viewModel.onQueryChange(it) },
         onActiveChange = { viewModel.onActiveChange(it) },
-        onMovieClick = onMovieClick
+        onMovieClick = onMovieClick,
+        onMovieDelete = { viewModel.onMovieDelete(it) }
     )
 }
 
@@ -88,6 +93,7 @@ internal fun SearchScreen(
     onQueryChange: (String) -> Unit,
     onActiveChange: (Boolean) -> Unit,
     onMovieClick: (MovieBo) -> Unit,
+    onMovieDelete: (MovieBo) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -106,6 +112,7 @@ internal fun SearchScreen(
         PreviousSearchesContent(
             state = previousSearchesUiState,
             onMovieClick = onMovieClick,
+            onMovieDelete = onMovieDelete,
             modifier = Modifier.padding(padding)
         )
     }
@@ -170,6 +177,7 @@ private fun SearchTopBar(
 private fun PreviousSearchesContent(
     state: PreviousSearchesUiState,
     onMovieClick: (MovieBo) -> Unit,
+    onMovieDelete: ((MovieBo) -> Unit),
     modifier: Modifier = Modifier,
 ) {
     when (state) {
@@ -180,16 +188,17 @@ private fun PreviousSearchesContent(
                 EmptyScreen(icon = Icons.Default.Search, text = R.string.search_content_placeholder)
             } else {
                 SearchList(
+                    modifier = modifier,
                     title = stringResource(R.string.search_previous_searches),
                     movies = state.previousSearches,
                     onMovieClick = onMovieClick,
+                    onMovieDelete = onMovieDelete,
                     contentPadding = PaddingValues(
                         start = 8.dp,
                         end = 8.dp,
                         top = 16.dp,
-                        bottom = 128.dp
-                    ),
-                    modifier = modifier
+                        bottom = 100.dp
+                    )
                 )
             }
         }
@@ -218,7 +227,7 @@ private fun SearchContent(
                         start = 8.dp,
                         end = 8.dp,
                         top = 16.dp,
-                        bottom = 128.dp
+                        bottom = 148.dp
                     )
                 )
             }
@@ -258,14 +267,15 @@ private fun EmptyScreen(
 
 @Composable
 private fun SearchList(
+    modifier: Modifier = Modifier,
     title: String,
     movies: List<MovieBo>,
     onMovieClick: (MovieBo) -> Unit,
-    contentPadding: PaddingValues,
-    modifier: Modifier = Modifier,
+    onMovieDelete: ((MovieBo) -> Unit)? = null,
+    contentPadding: PaddingValues
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(128.dp),
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -278,26 +288,53 @@ private fun SearchList(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
-        items(movies, key = { it.id }) {
-            SearchItem(movie = it) { onMovieClick(it) }
+        items(movies, key = { it.id }) { item ->
+            SearchItem(
+                movie = item,
+                onClick = { onMovieClick(item) },
+                onDelete = onMovieDelete?.let { { it(item) } }
+            )
         }
     }
 }
 
 @Composable
-private fun SearchItem(movie: MovieBo, onClick: () -> Unit) {
+private fun SearchItem(
+    movie: MovieBo,
+    onClick: () -> Unit,
+    onDelete: (() -> Unit)?,
+) {
     Column(
         modifier = Modifier.clickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ImageCoil(
-            imageUrl = movie.poster,
-            contentDescription = movie.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(2 / 3f)
-                .clip(MaterialTheme.shapes.small)
-        )
+        Box(modifier = Modifier.wrapContentSize()) {
+            ImageCoil(
+                imageUrl = movie.poster,
+                contentDescription = movie.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(2 / 3f)
+                    .clip(MaterialTheme.shapes.small)
+            )
+            onDelete?.let {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = R.string.search_delete),
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .size(20.dp)
+                        .background(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.errorContainer
+                        )
+                        .align(Alignment.TopEnd)
+                        .padding(2.dp)
+                        .clickable { onDelete() },
+                    tint = MaterialTheme.colorScheme.onErrorContainer
+                )
+            }
+        }
         Text(
             text = movie.title,
             style = MaterialTheme.typography.bodyMedium,
@@ -345,7 +382,8 @@ private fun SearchScreenPreview() {
             active = true,
             onQueryChange = {},
             onActiveChange = {},
-            onMovieClick = {}
+            onMovieClick = {},
+            onMovieDelete = {}
         )
     }
 }

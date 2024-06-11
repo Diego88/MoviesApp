@@ -1,7 +1,7 @@
 package com.dmoyahur.moviesapp.data.local.search.mapper
 
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.data.local.search.dbo.MovieSearchDbo
+import com.dmoyahur.moviesapp.model.MovieBo
 
 object MovieSearchDboMapper {
 
@@ -42,6 +42,4 @@ object MovieSearchDboMapper {
             )
         }
     }
-
-    internal fun String.toDatabaseQuery() = "%$this%"
 }

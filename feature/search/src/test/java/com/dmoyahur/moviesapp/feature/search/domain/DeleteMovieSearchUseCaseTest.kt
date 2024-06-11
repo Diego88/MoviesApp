@@ -2,21 +2,18 @@ package com.dmoyahur.moviesapp.feature.search.domain
 
 import com.dmoyahur.moviesapp.data.repository.search.SearchRepository
 import com.dmoyahur.moviesapp.model.error.AsyncException
-import com.dmoyahur.moviesapp.testShared.MovieMock
 import io.mockk.coEvery
-import io.mockk.every
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class GetPreviousSearchesUseCaseTest {
+class DeleteMovieSearchUseCaseTest {
 
     @get:Rule
     val mockkRule = MockKRule(this)
@@ -24,31 +21,30 @@ class GetPreviousSearchesUseCaseTest {
     @MockK
     lateinit var repository: SearchRepository
 
-    private lateinit var getPreviousSearchesUseCase: GetPreviousSearchesUseCase
+    private lateinit var deleteMovieSearchUseCase: DeleteMovieSearchUseCase
 
     @Before
     fun setUp() {
-        getPreviousSearchesUseCase = GetPreviousSearchesUseCase(repository)
+        deleteMovieSearchUseCase = DeleteMovieSearchUseCase(repository)
     }
 
     @Test
-    fun `when invoke is called, then get previous searches from search repository`() {
-        val expectedMovies = MovieMock.movies
-        every { repository.previousSearches } returns flowOf(expectedMovies)
+    fun `when invoke is called, then delete movie search from search repository`() {
+        coJustRun { repository.deleteMovieSearch(any()) }
 
-        val movies = runBlocking { getPreviousSearchesUseCase().first() }
+        runBlocking { deleteMovieSearchUseCase(1) }
 
-        assertEquals(expectedMovies, movies)
+        coVerify { repository.deleteMovieSearch(1) }
     }
 
     @Test
     fun `when invoke fails, then throw exception`() {
         val expectedException =
             AsyncException.UnknownError("Unknown error", IllegalStateException("Unknown error"))
-        coEvery { repository.previousSearches } throws expectedException
+        coEvery { repository.deleteMovieSearch(any()) } throws expectedException
 
         assertThrows(expectedException.debugMessage, expectedException::class.java) {
-            runBlocking { getPreviousSearchesUseCase() }
+            runBlocking { deleteMovieSearchUseCase(1) }
         }
     }
 }

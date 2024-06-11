@@ -33,6 +33,7 @@ class SearchScreenTest {
                     false,
                     {},
                     {},
+                    {},
                     {}
                 )
             }
@@ -53,6 +54,7 @@ class SearchScreenTest {
                     searchesUiState,
                     "",
                     false,
+                    {},
                     {},
                     {},
                     {}
@@ -78,6 +80,7 @@ class SearchScreenTest {
                     true,
                     {},
                     {},
+                    {},
                     {}
                 )
             }
@@ -98,6 +101,7 @@ class SearchScreenTest {
                     searchesUiState,
                     "Movie",
                     true,
+                    {},
                     {},
                     {},
                     {}
@@ -123,6 +127,7 @@ class SearchScreenTest {
                     true,
                     {},
                     {},
+                    {},
                     {}
                 )
             }
@@ -143,6 +148,7 @@ class SearchScreenTest {
                     searchesUiState,
                     "Movie",
                     true,
+                    {},
                     {},
                     {},
                     {}

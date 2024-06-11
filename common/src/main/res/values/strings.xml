@@ -3,7 +3,6 @@
     <string name="error">Error</string>
     <string name="generic_error">An error occurred</string>
     <string name="connection_error">Connection error</string>
-    <string name="database_error">Database error</string>
     <string name="back">Go Back</string>
     <string name="close">Close</string>
     <string name="search">Search</string>

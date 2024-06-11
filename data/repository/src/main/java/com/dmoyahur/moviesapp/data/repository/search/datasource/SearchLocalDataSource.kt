@@ -9,7 +9,11 @@ interface SearchLocalDataSource {
 
     fun findMovieSearchById(id: Int): Flow<MovieBo?>
 
-    fun findMovieSearchByQuery(query: String): Flow<List<MovieBo>>
-
     suspend fun saveMovieSearch(movie: MovieBo)
+
+    suspend fun deleteMovieSearch(id: Int)
+
+    suspend fun getMoviesSearchCount(): Int
+
+    suspend fun deleteOldestSearches(excessCount: Int)
 }

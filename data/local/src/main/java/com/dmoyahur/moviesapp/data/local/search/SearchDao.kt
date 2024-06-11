@@ -21,4 +21,13 @@ interface SearchDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveMovieSearch(movie: MovieSearchDbo)
+
+    @Query("DELETE FROM MovieSearch WHERE id = :id")
+    suspend fun deleteMovieSearch(id: Int)
+
+    @Query("SELECT COUNT(*) FROM MovieSearch")
+    suspend fun getMoviesSearchCount(): Int
+
+    @Query("DELETE FROM MovieSearch WHERE id IN (SELECT id FROM MovieSearch ORDER BY timestamp ASC LIMIT :excessCount)")
+    suspend fun deleteOldestSearches(excessCount: Int)
 }
