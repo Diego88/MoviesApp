@@ -12,5 +12,11 @@ dependencies {
     implementation(project(":model"))
     implementation(project(":data:repository"))
 
+    testImplementation(project(":testShared"))
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.junit)
+    testImplementation(libs.roboelectric)
 }

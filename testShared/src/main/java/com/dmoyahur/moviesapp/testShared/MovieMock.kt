@@ -10,7 +10,7 @@ object MovieMock {
 
     private fun buildMovie(index: Int) = MovieBo(
         id = index,
-        title = "title $index",
+        title = "Movie $index",
         overview = "overview $index",
         popularity = index.toDouble(),
         releaseDate = "2024-06-${if (index < 10) "0$index" else index}",

@@ -22,5 +22,8 @@ dependencies {
     implementation(project(":data:repository"))
     implementation(libs.kotlinx.serialization.json)
 
+    testImplementation(project(":testShared"))
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

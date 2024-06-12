@@ -27,6 +27,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 turbine = "1.1.0"
 androidxCompose = "1.6.7"
+roboelectric = "4.12.2"
 
 [libraries]
 # Dependencies of the included build-logic
@@ -74,6 +75,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine"}
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxCompose" }
+roboelectric = { group = "org.robolectric", name = "robolectric", version.ref = "roboelectric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

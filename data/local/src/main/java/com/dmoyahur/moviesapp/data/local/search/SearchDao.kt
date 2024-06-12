@@ -16,9 +16,6 @@ interface SearchDao {
     @Query("SELECT * FROM MovieSearch WHERE id = :id")
     fun findMovieSearchById(id: Int): Flow<MovieSearchDbo?>
 
-    @Query("SELECT * FROM MovieSearch WHERE title LIKE :query")
-    fun findMovieSearchByQuery(query: String): Flow<List<MovieSearchDbo>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveMovieSearch(movie: MovieSearchDbo)
 
