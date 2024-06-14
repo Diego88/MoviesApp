@@ -9,12 +9,17 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
-class MoviesRepository @Inject constructor(
+interface MoviesRepository {
+    val movies: Flow<List<MovieBo>>
+    fun findMovieById(id: Int): Flow<MovieBo>
+}
+
+class MoviesRepositoryImpl @Inject constructor(
     private val remoteDataSource: MoviesRemoteDataSource,
     private val localDataSource: MoviesLocalDataSource,
-) {
+) : MoviesRepository {
 
-    val movies: Flow<List<MovieBo>> = localDataSource.movies.onStart {
+    override val movies: Flow<List<MovieBo>> = localDataSource.movies.onStart {
         try {
             val remoteMovies = remoteDataSource.fetchPopularMovies()
             localDataSource.saveMovies(remoteMovies)
@@ -23,5 +28,6 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    fun findMovieById(id: Int): Flow<MovieBo> = localDataSource.findMovieById(id).filterNotNull()
+    override fun findMovieById(id: Int): Flow<MovieBo> =
+        localDataSource.findMovieById(id).filterNotNull()
 }

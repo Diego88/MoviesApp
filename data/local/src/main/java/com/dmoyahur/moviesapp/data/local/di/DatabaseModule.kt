@@ -20,10 +20,4 @@ internal object DatabaseModule {
         AppRoomDatabase::class.java,
         "movie-db"
     ).build()
-
-    @Provides
-    fun provideMoviesDao(db: AppRoomDatabase) = db.moviesDao()
-
-    @Provides
-    fun provideSearchDao(db: AppRoomDatabase) = db.searchDao()
 }

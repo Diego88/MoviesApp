@@ -46,7 +46,7 @@ class SearchRepositoryTest {
         coEvery { remoteDataSource.fetchMovieById(any()) } returns movies.first()
         coJustRun { localDataSource.saveMovieSearch(any()) }
 
-        repository = SearchRepository(remoteDataSource, localDataSource)
+        repository = SearchRepositoryImpl(remoteDataSource, localDataSource)
     }
 
     @Test

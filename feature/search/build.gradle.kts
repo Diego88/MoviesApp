@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
 
     testImplementation(project(":testShared"))
+    testImplementation(project(":data:test"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)

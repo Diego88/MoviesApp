@@ -41,7 +41,7 @@ class MoviesRepositoryTest {
         coEvery { remoteDataSource.fetchPopularMovies() } returns movies
         coEvery { localDataSource.movies } returns flowOf(movies)
 
-        repository = MoviesRepository(remoteDataSource, localDataSource)
+        repository = MoviesRepositoryImpl(remoteDataSource, localDataSource)
     }
 
     @Test

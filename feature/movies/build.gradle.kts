@@ -16,6 +16,7 @@ dependencies {
     implementation(project(":data:repository"))
 
     testImplementation(project(":testShared"))
+    testImplementation(project(":data:test"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
