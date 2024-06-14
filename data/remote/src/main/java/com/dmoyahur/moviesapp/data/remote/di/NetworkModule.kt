@@ -12,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -21,12 +20,7 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    @Named("baseUrl")
-    fun provideBaseUrl(): String = "https://api.themoviedb.org/3/"
-
-    @Provides
-    @Singleton
-    @Named("apiKey")
+    @ApiKey
     fun provideApiKey(): String = BuildConfig.API_KEY
 
     @Provides
@@ -35,7 +29,7 @@ internal object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiKeyInterceptor(@Named("apiKey") apiKey: String): Interceptor = Interceptor { chain ->
+    fun provideApiKeyInterceptor(@ApiKey apiKey: String): Interceptor = Interceptor { chain ->
         chain.proceed(
             chain.request()
                 .newBuilder()
@@ -66,7 +60,7 @@ internal object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofitClient(
-        @Named("baseUrl") baseUrl: String,
+        @BaseUrl baseUrl: String,
         okHttpClient: OkHttpClient,
         jsonConverter: Json
     ): Retrofit {
@@ -76,4 +70,14 @@ internal object NetworkModule {
             .addConverterFactory(jsonConverter.asConverterFactory("application/json".toMediaType()))
             .build()
     }
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object BaseUrlModule {
+
+    @Provides
+    @Singleton
+    @BaseUrl
+    fun provideBaseUrl(): String = "https://api.themoviedb.org/3/"
 }

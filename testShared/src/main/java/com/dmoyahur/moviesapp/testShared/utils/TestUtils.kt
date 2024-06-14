@@ -7,6 +7,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.hasText
 import androidx.test.platform.app.InstrumentationRegistry
+import okhttp3.mockwebserver.MockResponse
 
 fun hasText(
     @StringRes id: Int,
@@ -29,5 +30,8 @@ fun SemanticsNodeInteractionsProvider.onNodeWithText(
 fun readResourceFile(path: String): String {
     return object {}.javaClass.classLoader?.getResource(path)?.readText() ?: ""
 }
+
+fun MockResponse.fromJson(jsonFile: String): MockResponse =
+    setBody(readResourceFile(jsonFile))
 
 private fun getTargetContext(): Context = InstrumentationRegistry.getInstrumentation().targetContext

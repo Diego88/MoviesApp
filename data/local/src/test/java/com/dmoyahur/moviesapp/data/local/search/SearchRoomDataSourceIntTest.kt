@@ -3,7 +3,8 @@ package com.dmoyahur.moviesapp.data.local.search
 import android.os.Build
 import com.dmoyahur.moviesapp.data.local.AppRoomDatabase
 import com.dmoyahur.moviesapp.data.local.movies.dbo.MovieDbo
-import com.dmoyahur.moviesapp.data.local.search.dbo.MovieSearchDbo
+import com.dmoyahur.moviesapp.model.MovieBo
+import com.dmoyahur.moviesapp.testShared.MovieMock
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -12,8 +13,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +30,7 @@ import javax.inject.Named
     manifest = Config.NONE,
     sdk = [Build.VERSION_CODES.UPSIDE_DOWN_CAKE]
 )
-class SearchDaoTest {
+class SearchRoomDataSourceIntTest {
 
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
@@ -43,9 +43,14 @@ class SearchDaoTest {
     @Named("test_searchDao")
     lateinit var searchDao: SearchDao
 
+    private lateinit var datasource: SearchRoomDataSource
+
+    private val movies = MovieMock.movies
+
     @Before
     fun setUp() {
         hiltRule.inject()
+        datasource = SearchRoomDataSource(searchDao)
     }
 
     @After
@@ -54,107 +59,105 @@ class SearchDaoTest {
     }
 
     @Test
-    fun `when getMoviesSearch is called and database is empty, then return empty list`() =
+    fun `when previousSearches is called and database is empty, then return empty list`() =
         runTest {
-            val actual = searchDao.getMoviesSearch().first()
+            val actual = datasource.previousSearches.first()
 
-            assertEquals(emptyList<MovieDbo>(), actual)
+            Assert.assertEquals(emptyList<MovieDbo>(), actual)
         }
 
     @Test
-    fun `when getMoviesSearch is called and database is not empty, then return movies search`() =
+    fun `when previousSearches is called and database is not empty, then return movies search`() =
         runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo
             val expectedMovies = movies.take(2)
             saveMovies(expectedMovies)
 
-            val actual = searchDao.getMoviesSearch().first()
+            val actual = datasource.previousSearches.first().sorted()
 
-            assertEquals(expectedMovies, actual)
+            Assert.assertEquals(expectedMovies, actual)
         }
 
     @Test
     fun `when saveMovieSearch is called, then save movies search in database`() = runTest {
-        val movies = MovieSearchDboMock.moviesSearchDbo
         val expectedMovies = movies.take(5)
 
-        val actualBeforeSave = searchDao.getMoviesSearch().first()
+        val actualBeforeSave = datasource.previousSearches.first()
         saveMovies(expectedMovies)
-        val actualAfterSave = searchDao.getMoviesSearch().first()
+        val actualAfterSave = datasource.previousSearches.first().sorted()
 
-        assertEquals(emptyList<MovieDbo>(), actualBeforeSave)
-        assertEquals(expectedMovies, actualAfterSave)
+        Assert.assertEquals(emptyList<MovieDbo>(), actualBeforeSave)
+        Assert.assertEquals(expectedMovies, actualAfterSave)
     }
 
     @Test
     fun `when findMovieSearchById is called, then return movie`() = runTest {
-        val movies = MovieSearchDboMock.moviesSearchDbo
         val expectedMovie = movies.first()
         saveMovies(movies)
 
-        val actual = searchDao.findMovieSearchById(1).first()
+        val actual = datasource.findMovieSearchById(1).first()
 
-        assertEquals(expectedMovie, actual)
+        Assert.assertEquals(expectedMovie, actual)
     }
 
     @Test
     fun `when findMovieSearchById is called and movie is not in database, then return null`() =
         runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo
             saveMovies(movies)
 
-            val actual = searchDao.findMovieSearchById(0).first()
+            val actual = datasource.findMovieSearchById(0).first()
 
-            assertNull(actual)
+            Assert.assertNull(actual)
         }
 
     @Test
     fun `when getMovieSearchCount is called, then return the number of movies search in database`() =
         runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo.take(5)
+            val movies = movies.take(5)
             saveMovies(movies)
 
-            val actual = searchDao.getMoviesSearchCount()
+            val actual = datasource.getMoviesSearchCount()
 
-            assertEquals(5, actual)
+            Assert.assertEquals(5, actual)
         }
 
     @Test
     fun `when deleteMovieSearch is called, then delete movies search from database`() =
         runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo
             saveMovies(movies.take(1))
 
-            val actualBeforeDelete = searchDao.getMoviesSearchCount()
-            searchDao.deleteMovieSearch(1)
-            val actualAfterDelete = searchDao.getMoviesSearchCount()
+            val actualBeforeDelete = datasource.getMoviesSearchCount()
+            datasource.deleteMovieSearch(1)
+            val actualAfterDelete = datasource.getMoviesSearchCount()
 
-            assertEquals(1, actualBeforeDelete)
-            assertEquals(0, actualAfterDelete)
+            Assert.assertEquals(1, actualBeforeDelete)
+            Assert.assertEquals(0, actualAfterDelete)
         }
 
     @Test
     fun `when deleteOldestSearches is called, then delete oldest movies search from database`() =
         runTest {
             val excessCount = 2
-            val expectedMoviesBeforeDelete = MovieSearchDboMock.moviesSearchDbo
-            val expectedMoviesAfterDelete =
-                expectedMoviesBeforeDelete.sortedBy { it.timeStamp }.drop(excessCount)
+            val expectedMoviesBeforeDelete = movies
+            val expectedMoviesAfterDelete = movies.drop(excessCount)
             saveMovies(expectedMoviesBeforeDelete)
 
-            val actualBeforeDelete = searchDao.getMoviesSearch().first()
-            searchDao.deleteOldestSearches(excessCount)
-            val actualAfterDelete = searchDao.getMoviesSearch().first()
+            val actualBeforeDelete = datasource.previousSearches.first().sorted()
+            datasource.deleteOldestSearches(excessCount)
+            val actualAfterDelete = datasource.previousSearches.first().sorted()
 
-            assertEquals(expectedMoviesBeforeDelete, actualBeforeDelete)
-            assertEquals(expectedMoviesAfterDelete, actualAfterDelete)
+            Assert.assertEquals(expectedMoviesBeforeDelete, actualBeforeDelete)
+            Assert.assertEquals(expectedMoviesAfterDelete, actualAfterDelete)
         }
 
-    private suspend fun saveMovies(movies: List<MovieSearchDbo>) {
+    private suspend fun saveMovies(movies: List<MovieBo>) {
         withContext(Dispatchers.IO) {
             movies.forEach {
-                searchDao.saveMovieSearch(it)
+                datasource.saveMovieSearch(it)
             }
         }
     }
+
+    // Order movies by id (we don't have timestamp here)
+    private fun List<MovieBo>.sorted() = sortedBy { it.id }
+
 }

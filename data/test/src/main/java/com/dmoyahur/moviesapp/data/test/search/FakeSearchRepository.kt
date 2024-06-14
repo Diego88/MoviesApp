@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FakeSearchRepository(
     private val remoteMovies: List<MovieBo>? = emptyList(),
     localMovies: List<MovieBo> = emptyList(),
@@ -22,7 +23,6 @@ class FakeSearchRepository(
 
     override val previousSearches = MutableStateFlow(localMovies)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun findMovieSearchById(id: Int): Flow<MovieBo> {
         return previousSearches.flatMapLatest { movies ->
             flowOf(movies.find { it.id == id })

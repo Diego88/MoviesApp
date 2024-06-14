@@ -30,7 +30,7 @@ class SearchNetworkDataSourceTest {
     }
 
     @Test
-    fun `when request a movie by its id, then return movie`() {
+    fun `when request a movie by id, then return movie`() {
         val response = MovieDtoMock.moviesDto.first()
         val expectedMovie = MovieDtoMapper.mapToDomain(response)
         coEvery { searchApi.fetchMovieById(1) } returns response
@@ -41,7 +41,7 @@ class SearchNetworkDataSourceTest {
     }
 
     @Test
-    fun `when request popular movies fails, then throw an exception`() {
+    fun `when request a movie by id fails, then throw an exception`() {
         coEvery { searchApi.fetchMovieById(1) } throws UnknownHostException("Host cannot be resolved")
 
         assertThrows("Host cannot be resolved", AsyncException.ConnectionError::class.java) {

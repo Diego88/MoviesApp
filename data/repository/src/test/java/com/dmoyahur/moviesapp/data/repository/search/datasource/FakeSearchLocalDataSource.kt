@@ -2,6 +2,7 @@ package com.dmoyahur.moviesapp.data.repository.search.datasource
 
 import com.dmoyahur.moviesapp.model.MovieBo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FakeSearchLocalDataSource(
     moviesSearch: List<MovieBo> = emptyList(),
 ) : SearchLocalDataSource {

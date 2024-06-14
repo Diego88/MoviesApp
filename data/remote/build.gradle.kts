@@ -25,5 +25,8 @@ dependencies {
     testImplementation(project(":testShared"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.hilt.android.testing)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.roboelectric)
+    testImplementation(libs.mockWebServer)
 }
