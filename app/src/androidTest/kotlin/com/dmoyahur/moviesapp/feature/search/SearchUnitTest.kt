@@ -1,22 +1,20 @@
 package com.dmoyahur.moviesapp.feature.search
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.search.ui.PreviousSearchesUiState
 import com.dmoyahur.moviesapp.feature.search.ui.SearchResultUiState
 import com.dmoyahur.moviesapp.feature.search.ui.SearchScreen
 import com.dmoyahur.moviesapp.model.error.AsyncException
 import com.dmoyahur.moviesapp.testShared.MovieMock
-import com.dmoyahur.moviesapp.testShared.utils.onNodeWithText
+import com.dmoyahur.moviesapp.testShared.utils.assertTextIsDisplayed
 import org.junit.Rule
 import org.junit.Test
 import com.dmoyahur.moviesapp.common.R as commonRes
 
-class SearchScreenTest {
+class SearchUnitTest {
 
-    @get:Rule()
+    @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
@@ -39,7 +37,7 @@ class SearchScreenTest {
             }
         }
 
-        onNodeWithText(R.string.search_content_placeholder).assertIsDisplayed()
+        assertTextIsDisplayed(R.string.search_content_placeholder)
     }
 
     @Test
@@ -62,9 +60,9 @@ class SearchScreenTest {
             }
         }
 
-        onNodeWithText(R.string.search_previous_searches).assertIsDisplayed()
-        onNodeWithText(movies[0].title).assertIsDisplayed()
-        onNodeWithText(movies[1].title).assertIsDisplayed()
+        assertTextIsDisplayed(R.string.search_previous_searches)
+        assertTextIsDisplayed(movies[0].title)
+        assertTextIsDisplayed(movies[1].title)
     }
 
     @Test
@@ -86,7 +84,7 @@ class SearchScreenTest {
             }
         }
 
-        onNodeWithText(R.string.search_content_placeholder).assertIsDisplayed()
+        assertTextIsDisplayed(R.string.search_content_placeholder)
     }
 
     @Test
@@ -109,9 +107,9 @@ class SearchScreenTest {
             }
         }
 
-        onNodeWithText(R.string.search_main_results).assertIsDisplayed()
-        onNodeWithText(movies[0].title).assertIsDisplayed()
-        onNodeWithText(movies[1].title).assertIsDisplayed()
+        assertTextIsDisplayed(R.string.search_main_results)
+        assertTextIsDisplayed(movies[0].title)
+        assertTextIsDisplayed(movies[1].title)
     }
 
     @Test
@@ -133,7 +131,7 @@ class SearchScreenTest {
             }
         }
 
-        onNodeWithText(R.string.search_no_results).assertIsDisplayed()
+        assertTextIsDisplayed(R.string.search_no_results)
     }
 
     @Test
@@ -156,6 +154,6 @@ class SearchScreenTest {
             }
         }
 
-        onNodeWithText(commonRes.string.connection_error).assertIsDisplayed()
+        assertTextIsDisplayed(commonRes.string.connection_error)
     }
 }

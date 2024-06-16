@@ -16,5 +16,4 @@ dependencies {
     implementation(libs.junit)
     implementation(libs.androidx.compose.ui.test)
     implementation(libs.mockWebServer)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }

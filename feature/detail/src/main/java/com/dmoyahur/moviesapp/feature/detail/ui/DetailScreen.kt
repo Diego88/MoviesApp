@@ -1,5 +1,6 @@
 package com.dmoyahur.moviesapp.feature.detail.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,8 +36,8 @@ import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.feature.detail.R
-import com.dmoyahur.moviesapp.feature.detail.util.DetailConstants
 import com.dmoyahur.moviesapp.model.MovieBo
 
 @Composable
@@ -51,7 +52,8 @@ fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Unit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DetailScreen(state: DetailUiState, onBack: () -> Unit) {
+@VisibleForTesting
+fun DetailScreen(state: DetailUiState, onBack: () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
@@ -91,7 +93,7 @@ private fun MovieDetail(movie: MovieBo, modifier: Modifier = Modifier) {
                 text = movie.overview,
                 modifier = Modifier
                     .padding(16.dp)
-                    .testTag(DetailConstants.OVERVIEW_TAG)
+                    .testTag(TestConstants.Detail.OVERVIEW_TAG)
             )
             Column(
                 modifier = Modifier
@@ -102,31 +104,31 @@ private fun MovieDetail(movie: MovieBo, modifier: Modifier = Modifier) {
                 MovieDetailProperty(
                     name = stringResource(id = R.string.detail_original_language),
                     value = movie.originalLanguage,
-                    modifier = Modifier.testTag(DetailConstants.ORIGINAL_LANGUAGE_TAG)
+                    modifier = Modifier.testTag(TestConstants.Detail.ORIGINAL_LANGUAGE_TAG)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 MovieDetailProperty(
                     name = stringResource(id = R.string.detail_original_title),
                     value = movie.originalTitle,
-                    modifier = Modifier.testTag(DetailConstants.MOVIE_TITLE_TAG)
+                    modifier = Modifier.testTag(TestConstants.Detail.ORIGINAL_TITLE_TAG)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 MovieDetailProperty(
                     name = stringResource(id = R.string.detail_release_date),
                     value = movie.releaseDate,
-                    modifier = Modifier.testTag(DetailConstants.RELEASE_DATE_TAG)
+                    modifier = Modifier.testTag(TestConstants.Detail.RELEASE_DATE_TAG)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 MovieDetailProperty(
                     name = stringResource(id = R.string.detail_popularity),
                     value = movie.popularity.toString(),
-                    modifier = Modifier.testTag(DetailConstants.POPULARITY_TAG)
+                    modifier = Modifier.testTag(TestConstants.Detail.POPULARITY_TAG)
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 MovieDetailProperty(
                     name = stringResource(id = R.string.detail_vote_average),
                     value = movie.voteAverage.toString(),
-                    modifier = Modifier.testTag(DetailConstants.VOTE_AVERAGE_TAG)
+                    modifier = Modifier.testTag(TestConstants.Detail.VOTE_AVERAGE_TAG)
                 )
             }
         }

@@ -64,7 +64,7 @@ class MoviesRoomDataSourceIntTest {
     @Test
     fun `when movies is called and database is not empty, then return movies`() =
         runTest {
-            val expectedMovies = MovieMock.movies
+            val expectedMovies = MovieMock.movies.sortedByDescending { it.popularity }
             datasource.saveMovies(expectedMovies)
 
             val actual = datasource.movies.first()
@@ -74,7 +74,7 @@ class MoviesRoomDataSourceIntTest {
 
     @Test
     fun `when saveMovies is called, then save movies in database`() = runTest {
-        val expectedMovies = MovieMock.movies
+        val expectedMovies = MovieMock.movies.sortedByDescending { it.popularity }
 
         val actualBeforeSave = datasource.movies.first()
         datasource.saveMovies(expectedMovies)

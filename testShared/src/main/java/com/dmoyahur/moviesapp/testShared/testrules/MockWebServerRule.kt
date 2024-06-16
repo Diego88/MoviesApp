@@ -30,7 +30,7 @@ private class MockDispatcher : Dispatcher() {
             listOf("movie", "653346") -> MockResponse().fromJson("movie_id.json")
             listOf("search", "movie") -> {
                 val query = requestUrl.queryParameter("query")
-                if (query.isNullOrBlank()) {
+                if (query == "XXX") {
                     MockResponse().fromJson("search_movie_empty.json")
                 } else {
                     MockResponse().fromJson("search_movie.json")

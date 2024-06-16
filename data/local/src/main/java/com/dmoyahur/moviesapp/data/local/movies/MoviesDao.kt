@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MoviesDao {
 
-    @Query("SELECT * FROM Movie")
+    @Query("SELECT * FROM Movie ORDER BY popularity DESC")
     fun getPopularMovies(): Flow<List<MovieDbo>>
 
     @Query("SELECT * FROM Movie WHERE id = :id")

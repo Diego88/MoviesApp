@@ -2,6 +2,7 @@ package com.dmoyahur.moviesapp.feature.search.ui
 
 import android.annotation.SuppressLint
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,6 +53,7 @@ import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.feature.search.R
 import com.dmoyahur.moviesapp.feature.search.util.header
 import com.dmoyahur.moviesapp.model.MovieBo
@@ -85,7 +88,8 @@ fun SearchRoute(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-internal fun SearchScreen(
+@VisibleForTesting
+fun SearchScreen(
     previousSearchesUiState: PreviousSearchesUiState,
     searchResultUiState: SearchResultUiState,
     query: String,
@@ -188,7 +192,7 @@ private fun PreviousSearchesContent(
                 EmptyScreen(icon = Icons.Default.Search, text = R.string.search_content_placeholder)
             } else {
                 SearchList(
-                    modifier = modifier,
+                    modifier = modifier.testTag(TestConstants.Search.PREVIOUS_SEARCHES_LIST_TAG),
                     title = stringResource(R.string.search_previous_searches),
                     movies = state.previousSearches,
                     onMovieClick = onMovieClick,
@@ -220,6 +224,7 @@ private fun SearchContent(
                 EmptyScreen(icon = Icons.Default.SearchOff, text = R.string.search_no_results)
             } else {
                 SearchList(
+                    modifier = Modifier.testTag(TestConstants.Search.SEARCH_RESULT_LIST_TAG),
                     title = stringResource(R.string.search_main_results),
                     movies = state.searchResult,
                     onMovieClick = onMovieClick,

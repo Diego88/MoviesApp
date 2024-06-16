@@ -1,21 +1,19 @@
 package com.dmoyahur.moviesapp.feature.movies
 
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
 import com.dmoyahur.moviesapp.common.ui.components.Screen
 import com.dmoyahur.moviesapp.feature.movies.ui.MoviesScreen
 import com.dmoyahur.moviesapp.feature.movies.ui.MoviesUiState
 import com.dmoyahur.moviesapp.model.error.AsyncException
 import com.dmoyahur.moviesapp.testShared.MovieMock
-import com.dmoyahur.moviesapp.testShared.utils.onNodeWithText
+import com.dmoyahur.moviesapp.testShared.utils.assertTextIsDisplayed
 import org.junit.Rule
 import org.junit.Test
 import com.dmoyahur.moviesapp.common.R as commonRes
 
-class MoviesScreenTest {
+class MoviesUnitTest {
 
-    @get:Rule()
+    @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
@@ -28,9 +26,9 @@ class MoviesScreenTest {
             }
         }
 
-        onNodeWithText(movies[0].title).assertIsDisplayed()
-        onNodeWithText(movies[1].title).assertIsDisplayed()
-        onNodeWithText(movies[2].title).assertIsDisplayed()
+        assertTextIsDisplayed(movies[0].title)
+        assertTextIsDisplayed(movies[1].title)
+        assertTextIsDisplayed(movies[2].title)
     }
 
     @Test
@@ -42,6 +40,6 @@ class MoviesScreenTest {
             }
         }
 
-        onNodeWithText(commonRes.string.generic_error).assertIsDisplayed()
+        assertTextIsDisplayed(commonRes.string.generic_error)
     }
 }

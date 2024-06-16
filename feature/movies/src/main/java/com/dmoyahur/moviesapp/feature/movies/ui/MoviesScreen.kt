@@ -1,5 +1,6 @@
 package com.dmoyahur.moviesapp.feature.movies.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +35,7 @@ import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.feature.movies.R
 import com.dmoyahur.moviesapp.model.MovieBo
 import kotlin.random.Random
@@ -48,7 +51,8 @@ fun MoviesRoute(viewModel: MoviesViewModel = hiltViewModel(), onMovieClick: (Mov
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit) {
+@VisibleForTesting
+fun MoviesScreen(state: MoviesUiState, onMovieClick: (MovieBo) -> Unit) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -85,7 +89,7 @@ private fun MoviesList(
         contentPadding = contentPadding,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = modifier
+        modifier = modifier.testTag(TestConstants.Movies.MOVIES_LIST_TAG)
     ) {
         items(movies, key = { it.id }) {
             MovieItem(movie = it) { onMovieClick(it) }

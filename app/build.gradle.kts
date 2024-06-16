@@ -12,7 +12,7 @@ android {
         applicationId = "com.dmoyahur.moviesapp"
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.dmoyahur.moviesapp.testShared.HiltTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -49,16 +49,23 @@ dependencies {
     implementation(project(":data:remote"))
     implementation(project(":data:repository"))
     implementation(project(":common"))
-    implementation(project(":testShared"))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.icons)
     implementation(libs.androidx.core.splashscreen)
 
+    ksp(libs.hilt.compiler)
+
     testImplementation(libs.junit)
+    androidTestImplementation(project(":testShared"))
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.hilt.android.testing)
+
+    kspTest(libs.hilt.compiler)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

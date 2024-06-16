@@ -5,10 +5,6 @@ plugins {
 
 android {
     namespace = "com.dmoyahur.moviesapp.feature.search"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 dependencies {
@@ -23,9 +19,4 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
-
-    androidTestImplementation(project(":testShared"))
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }

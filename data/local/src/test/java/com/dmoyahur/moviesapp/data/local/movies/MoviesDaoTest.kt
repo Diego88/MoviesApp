@@ -61,7 +61,7 @@ class MoviesDaoTest {
     @Test
     fun `when getPopularMovies is called and database is not empty, then return movies`() =
         runTest {
-            val expectedMovies = MovieDboMock.moviesDbo
+            val expectedMovies = MovieDboMock.moviesDbo.sortedByDescending { it.popularity }
             moviesDao.saveMovies(expectedMovies)
 
             val actual = moviesDao.getPopularMovies().first()
@@ -71,7 +71,7 @@ class MoviesDaoTest {
 
     @Test
     fun `when saveMovies is called, then save movies in database`() = runTest {
-        val expectedMovies = MovieDboMock.moviesDbo
+        val expectedMovies = MovieDboMock.moviesDbo.sortedByDescending { it.popularity }
 
         val actualBeforeSave = moviesDao.getPopularMovies().first()
         moviesDao.saveMovies(expectedMovies)

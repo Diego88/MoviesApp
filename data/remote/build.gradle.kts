@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(project(":testShared"))
+    testImplementation(project(":common"))
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.hilt.android.testing)

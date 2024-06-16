@@ -1,6 +1,7 @@
 package com.dmoyahur.moviesapp.data.remote.search
 
 import android.os.Build
+import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.data.remote.movies.dto.MovieDto
 import com.dmoyahur.moviesapp.data.remote.movies.mapper.MovieDtoMapper
 import com.dmoyahur.moviesapp.model.MovieBo
@@ -80,7 +81,7 @@ class SearchNetworkDataSourceIntTest {
 
     @Test
     fun `when request a movie search, then return a list of movies`() {
-        val query = "Movie"
+        val query = "the"
         val response = listOf(
             MovieDto(
                 id = 653346,
@@ -116,7 +117,9 @@ class SearchNetworkDataSourceIntTest {
 
     @Test
     fun `when a movie search does not have result, then return an empty list`() {
-        val actual = runBlocking { dataSource.searchMovie("") }
+        val actual = runBlocking {
+            dataSource.searchMovie(TestConstants.Search.QUERY_NO_RESULTS)
+        }
 
         assertEquals(emptyList<MovieBo>(), actual)
     }
