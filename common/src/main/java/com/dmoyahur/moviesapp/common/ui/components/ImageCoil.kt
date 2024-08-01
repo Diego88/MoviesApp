@@ -20,6 +20,7 @@ fun ImageCoil(
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageUrl)
+            .placeholder(placeholder)
             .error(placeholder)
             .build(),
         contentDescription = contentDescription,
