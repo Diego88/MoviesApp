@@ -126,7 +126,7 @@ class SearchDaoTest {
             saveMovies(movies.take(1))
 
             val actualBeforeDelete = searchDao.getMoviesSearchCount()
-            searchDao.deleteMovieSearch(1)
+            searchDao.deleteMovieSearch(movies.first().id)
             val actualAfterDelete = searchDao.getMoviesSearchCount()
 
             assertEquals(1, actualBeforeDelete)
