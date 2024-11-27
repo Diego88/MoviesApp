@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.common.ui.model.Result
 import com.dmoyahur.moviesapp.common.ui.model.asResult
+import com.dmoyahur.moviesapp.common.util.Constants.SHARING_STARTED_TIMEOUT
 import com.dmoyahur.moviesapp.feature.detail.domain.GetMovieByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getMovieByIdUseCase: GetMovieByIdUseCase,
+    getMovieByIdUseCase: GetMovieByIdUseCase
 ) : ViewModel() {
 
     companion object {
@@ -55,7 +56,7 @@ class DetailViewModel @Inject constructor(
         }
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(SHARING_STARTED_TIMEOUT),
             initialValue = DetailUiState.Loading
         )
 }

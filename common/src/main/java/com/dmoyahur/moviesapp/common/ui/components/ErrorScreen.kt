@@ -37,7 +37,7 @@ fun ErrorScreen(error: Throwable?, modifier: Modifier = Modifier) {
             Text(
                 text = getErrorMessage(error),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleLarge
             )
         }
     }
@@ -54,5 +54,5 @@ private fun getErrorMessage(error: Throwable?): String {
 @Preview(showBackground = true)
 @Composable
 private fun ErrorScreenPreview() {
-    ErrorScreen(error = Throwable())
+    ErrorScreen(error = Throwable("Error"))
 }

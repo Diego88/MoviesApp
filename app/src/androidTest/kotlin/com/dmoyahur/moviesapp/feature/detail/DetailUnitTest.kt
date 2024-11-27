@@ -22,7 +22,8 @@ class DetailUnitTest {
         setContent {
             Screen {
                 DetailScreen(
-                    state = DetailUiState.Success(movie = MovieMock.movies.first()), onBack = {}
+                    state = DetailUiState.Success(movie = MovieMock.movies.first()),
+                    onBack = {}
                 )
             }
         }

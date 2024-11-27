@@ -14,5 +14,5 @@ data class MovieDto(
     @SerialName("backdrop_path") val backdropPath: String?,
     @SerialName("original_title") val originalTitle: String,
     @SerialName("original_language") val originalLanguage: String,
-    @SerialName("vote_average") val voteAverage: Double,
+    @SerialName("vote_average") val voteAverage: Double
 )

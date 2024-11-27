@@ -7,10 +7,10 @@ import com.dmoyahur.moviesapp.data.local.search.dbo.MovieSearchDbo
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -54,24 +54,22 @@ class SearchDaoTest {
     }
 
     @Test
-    fun `when getMoviesSearch is called and database is empty, then return empty list`() =
-        runTest {
-            val actual = searchDao.getMoviesSearch().first()
+    fun `when getMoviesSearch is called and database is empty, then return empty list`() = runTest {
+        val actual = searchDao.getMoviesSearch().first()
 
-            assertEquals(emptyList<MovieDbo>(), actual)
-        }
+        assertEquals(emptyList<MovieDbo>(), actual)
+    }
 
     @Test
-    fun `when getMoviesSearch is called and database is not empty, then return movies search`() =
-        runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo
-            val expectedMovies = movies.take(2)
-            saveMovies(expectedMovies)
+    fun `when getMoviesSearch is called and database is not empty, then return movies search`() = runTest {
+        val movies = MovieSearchDboMock.moviesSearchDbo
+        val expectedMovies = movies.take(2)
+        saveMovies(expectedMovies)
 
-            val actual = searchDao.getMoviesSearch().first()
+        val actual = searchDao.getMoviesSearch().first()
 
-            assertEquals(expectedMovies, actual)
-        }
+        assertEquals(expectedMovies, actual)
+    }
 
     @Test
     fun `when saveMovieSearch is called, then save movies search in database`() = runTest {
@@ -98,62 +96,58 @@ class SearchDaoTest {
     }
 
     @Test
-    fun `when findMovieSearchById is called and movie is not in database, then return null`() =
-        runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo
-            saveMovies(movies)
+    fun `when findMovieSearchById is called and movie is not in database, then return null`() = runTest {
+        val movies = MovieSearchDboMock.moviesSearchDbo
+        saveMovies(movies)
 
-            val actual = searchDao.findMovieSearchById(0).first()
+        val actual = searchDao.findMovieSearchById(0).first()
 
-            assertNull(actual)
-        }
-
-    @Test
-    fun `when getMovieSearchCount is called, then return the number of movies search in database`() =
-        runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo.take(5)
-            saveMovies(movies)
-
-            val actual = searchDao.getMoviesSearchCount()
-
-            assertEquals(5, actual)
-        }
+        assertNull(actual)
+    }
 
     @Test
-    fun `when deleteMovieSearch is called, then delete movies search from database`() =
-        runTest {
-            val movies = MovieSearchDboMock.moviesSearchDbo
-            saveMovies(movies.take(1))
+    fun `when getMovieSearchCount is called, then return the number of movies search in database`() = runTest {
+        val movies = MovieSearchDboMock.moviesSearchDbo.take(5)
+        saveMovies(movies)
 
-            val actualBeforeDelete = searchDao.getMoviesSearchCount()
-            searchDao.deleteMovieSearch(movies.first().id)
-            val actualAfterDelete = searchDao.getMoviesSearchCount()
+        val actual = searchDao.getMoviesSearchCount()
 
-            assertEquals(1, actualBeforeDelete)
-            assertEquals(0, actualAfterDelete)
-        }
+        assertEquals(5, actual)
+    }
 
     @Test
-    fun `when deleteOldestSearches is called, then delete oldest movies search from database`() =
-        runTest {
-            val excessCount = 2
-            val expectedMoviesBeforeDelete = MovieSearchDboMock.moviesSearchDbo
-            val expectedMoviesAfterDelete =
-                expectedMoviesBeforeDelete.sortedBy { it.timeStamp }.drop(excessCount)
-            saveMovies(expectedMoviesBeforeDelete)
+    fun `when deleteMovieSearch is called, then delete movies search from database`() = runTest {
+        val movies = MovieSearchDboMock.moviesSearchDbo
+        saveMovies(movies.take(1))
 
-            val actualBeforeDelete = searchDao.getMoviesSearch().first()
-            searchDao.deleteOldestSearches(excessCount)
-            val actualAfterDelete = searchDao.getMoviesSearch().first()
+        val actualBeforeDelete = searchDao.getMoviesSearchCount()
+        searchDao.deleteMovieSearch(movies.first().id)
+        val actualAfterDelete = searchDao.getMoviesSearchCount()
 
-            assertEquals(expectedMoviesBeforeDelete, actualBeforeDelete)
-            assertEquals(expectedMoviesAfterDelete, actualAfterDelete)
-        }
+        assertEquals(1, actualBeforeDelete)
+        assertEquals(0, actualAfterDelete)
+    }
 
-    private suspend fun saveMovies(movies: List<MovieSearchDbo>) {
-        withContext(Dispatchers.IO) {
-            movies.forEach {
-                searchDao.saveMovieSearch(it)
+    @Test
+    fun `when deleteOldestSearches is called, then delete oldest movies search from database`() = runTest {
+        val excessCount = 2
+        val expectedMoviesBeforeDelete = MovieSearchDboMock.moviesSearchDbo
+        val expectedMoviesAfterDelete =
+            expectedMoviesBeforeDelete.sortedBy { it.timeStamp }.drop(excessCount)
+        saveMovies(expectedMoviesBeforeDelete)
+
+        val actualBeforeDelete = searchDao.getMoviesSearch().first()
+        searchDao.deleteOldestSearches(excessCount)
+        val actualAfterDelete = searchDao.getMoviesSearch().first()
+
+        assertEquals(expectedMoviesBeforeDelete, actualBeforeDelete)
+        assertEquals(expectedMoviesAfterDelete, actualAfterDelete)
+    }
+
+    private suspend fun saveMovies(movies: List<MovieSearchDbo>) = coroutineScope {
+        movies.forEach { movie ->
+            launch {
+                searchDao.saveMovieSearch(movie)
             }
         }
     }

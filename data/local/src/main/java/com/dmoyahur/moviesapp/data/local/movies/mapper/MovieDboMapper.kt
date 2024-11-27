@@ -1,7 +1,7 @@
 package com.dmoyahur.moviesapp.data.local.movies.mapper
 
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.data.local.movies.dbo.MovieDbo
+import com.dmoyahur.moviesapp.model.MovieBo
 
 object MovieDboMapper {
 

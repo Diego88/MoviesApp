@@ -7,6 +7,9 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+private const val SERVER_PORT = 8080
+private const val HTTP_NOT_FOUND = 404
+
 class MockWebServerRule : TestWatcher() {
 
     private lateinit var server: MockWebServer
@@ -14,7 +17,7 @@ class MockWebServerRule : TestWatcher() {
     override fun starting(description: Description?) {
         server = MockWebServer()
         server.dispatcher = MockDispatcher()
-        server.start(8080)
+        server.start(SERVER_PORT)
     }
 
     override fun finished(description: Description?) {
@@ -36,7 +39,7 @@ private class MockDispatcher : Dispatcher() {
                     MockResponse().fromJson("search_movie.json")
                 }
             }
-            else -> MockResponse().setResponseCode(404)
+            else -> MockResponse().setResponseCode(HTTP_NOT_FOUND)
         }
     }
 }

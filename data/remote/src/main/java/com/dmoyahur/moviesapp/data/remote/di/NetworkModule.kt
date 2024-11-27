@@ -49,12 +49,13 @@ internal object NetworkModule {
     fun provideOkHttpClient(apiKeyInterceptor: Interceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(apiKeyInterceptor)
-            .addInterceptor(HttpLoggingInterceptor()
-                .apply {
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
                     if (BuildConfig.DEBUG) {
                         setLevel(HttpLoggingInterceptor.Level.BODY)
                     }
-                })
+                }
+            )
             .build()
 
     @Provides

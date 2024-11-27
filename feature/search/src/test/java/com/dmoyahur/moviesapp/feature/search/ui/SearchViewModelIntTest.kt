@@ -68,14 +68,14 @@ class SearchViewModelIntTest {
     @Test
     fun `when type a query, then call search movie use case`() = runTest {
         val query = "Movie 1"
-        val expectedMovies = listOf(movies.first(), movies.last())  // Movie 1, Movie 10
+        val expectedMovies = listOf(movies.first(), movies.last()) // Movie 1, Movie 10
         initViewModel(remoteMovies = movies)
 
         viewModel.onActiveChange(true)
         viewModel.onQueryChange(query)
 
         viewModel.searchResultUiState.test {
-            skipItems(1)    // Loading is not shown in this state
+            skipItems(1) // Loading is not shown in this state
             assertEquals(SearchResultUiState.Success(expectedMovies), awaitItem())
         }
     }
@@ -124,7 +124,7 @@ class SearchViewModelIntTest {
 
     private fun initViewModel(
         remoteMovies: List<MovieBo>? = emptyList(),
-        localMovies: List<MovieBo> = emptyList(),
+        localMovies: List<MovieBo> = emptyList()
     ) {
         val repository = FakeSearchRepository(remoteMovies, localMovies)
         val searchMovieUseCase = SearchMovieUseCase(repository)

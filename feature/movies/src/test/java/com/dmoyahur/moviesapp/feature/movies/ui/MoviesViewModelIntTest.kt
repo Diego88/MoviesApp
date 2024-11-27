@@ -23,16 +23,15 @@ class MoviesViewModelIntTest {
     private val movies = MovieMock.movies
 
     @Test
-    fun `when view model is created, then fetch popular movies`() =
-        runTest {
-            val expectedMovies = movies
-            initViewModel(remoteMovies = expectedMovies)
+    fun `when view model is created, then fetch popular movies`() = runTest {
+        val expectedMovies = movies
+        initViewModel(remoteMovies = expectedMovies)
 
-            viewModel.state.test {
-                assertEquals(MoviesUiState.Loading, awaitItem())
-                assertEquals(MoviesUiState.Success(movies = expectedMovies), awaitItem())
-            }
+        viewModel.state.test {
+            assertEquals(MoviesUiState.Loading, awaitItem())
+            assertEquals(MoviesUiState.Success(movies = expectedMovies), awaitItem())
         }
+    }
 
     @Test
     fun `when view model is created, then return updated popular movies`() = runTest {
@@ -51,16 +50,15 @@ class MoviesViewModelIntTest {
     }
 
     @Test
-    fun `when local movies are not empty and fetch movies fails, then return local movies`() =
-        runTest {
-            val expectedMovies = movies
-            initViewModel(remoteMovies = null, localMovies = expectedMovies)
+    fun `when local movies are not empty and fetch movies fails, then return local movies`() = runTest {
+        val expectedMovies = movies
+        initViewModel(remoteMovies = null, localMovies = expectedMovies)
 
-            viewModel.state.test {
-                assertEquals(MoviesUiState.Loading, awaitItem())
-                assertEquals(MoviesUiState.Success(movies = expectedMovies), awaitItem())
-            }
+        viewModel.state.test {
+            assertEquals(MoviesUiState.Loading, awaitItem())
+            assertEquals(MoviesUiState.Success(movies = expectedMovies), awaitItem())
         }
+    }
 
     @Test
     fun `when local movies are empty and fetch movies fails, then get error state`() {
@@ -75,7 +73,7 @@ class MoviesViewModelIntTest {
 
     private fun initViewModel(
         remoteMovies: List<MovieBo>? = emptyList(),
-        localMovies: List<MovieBo> = emptyList(),
+        localMovies: List<MovieBo> = emptyList()
     ) {
         val moviesRepository = FakeMoviesRepository(remoteMovies, localMovies)
         val getPopularMoviesUseCase = GetPopularMoviesUseCase(moviesRepository)

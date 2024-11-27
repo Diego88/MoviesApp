@@ -111,7 +111,7 @@ class DetailViewModelIntTest {
     private fun initViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
         remoteMovies: List<MovieBo>? = emptyList(),
-        localMovies: List<MovieBo> = emptyList(),
+        localMovies: List<MovieBo> = emptyList()
     ) {
         val moviesRepository = FakeMoviesRepository(remoteMovies, localMovies)
         val searchRepository = FakeSearchRepository(remoteMovies, localMovies)

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class FakeMoviesRepository(
     private val remoteMovies: List<MovieBo>? = emptyList(),
-    localMovies: List<MovieBo> = emptyList(),
+    localMovies: List<MovieBo> = emptyList()
 ) : MoviesRepository {
 
     private var localDataSourceMovies = MutableStateFlow(localMovies)

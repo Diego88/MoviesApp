@@ -41,7 +41,7 @@ fun Navigation() {
             AnimatedVisibility(
                 visible = shouldShowNavigationBar,
                 enter = slideInVertically(initialOffsetY = { it }),
-                exit = slideOutVertically(targetOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it })
             ) {
                 NavigationBar(containerColor = MaterialTheme.colorScheme.background) {
                     BottomNavScreen.entries.forEach { item ->

@@ -33,6 +33,11 @@ details. The last searched movies will be saved in the history to facilitate lat
 * [Turbine](https://github.com/cashapp/turbine)
 * [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver)
 * [Robolectric](http://robolectric.org/)
+* [Firebase Test Lab](https://firebase.google.com/docs/test-lab)
+* [Detekt](https://detekt.dev/)
+* [Kotlinter](https://github.com/jeremymailen/kotlinter-gradle)
+* [Lint](https://developer.android.com/studio/write/lint)
+* [GitHub Actions](https://github.com/features/actions)
 
 ## Requirements
 
@@ -177,7 +182,7 @@ recommended by Google to achieve the following benefits:
   custom build logic, scripts, and plugins that are shared across multiple modules in your project.
   It helps to organize the build process, promoting consistency and reducing code duplication.
 
-You can see the dependency graph for all modules in the following images:
+You can see the dependency graph for all modules in the following image:
 
 ![Screenshot showing dependency graph](images/graph/dependency_graph.png)
 The dependencies of each module are represented by arrows pointing to the module
@@ -191,6 +196,18 @@ integration tests using test doubles (fakes), datasources integration tests with
 unit tests and UI end to end tests with Compose. You can run all the tests executing the following
 commands:
 
-- `./gradlew test` run all local tests
-- `./gradlew :app:connectedAndroidTest` run all instrumented test. All instrumented tests are
+- `./gradlew test` run all local tests.
+- `./gradlew :connectedAndroidTest` run all instrumented test. All instrumented tests are
   located in app module.
+
+## Code Analysis
+
+the app also has code analysis tools (Detekt, Kotlinter, Lint) to ensure code quality by detecting code 
+smells, style defects and bugs related to the Android framework. You can run each tool by executing the 
+following commands:
+
+- `./gradlew detektAll` run Detekt tool on all modules. Use `--continue` option so that the analysis 
+  does not stop until all errors are checked.
+- `./gradlew ktLint` run KtLint tool on all modules. Use `--continue` option so that the analysis
+  does not stop until all errors are checked.
+- `./gradlew lint` run Lint on all Android modules.

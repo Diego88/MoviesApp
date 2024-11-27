@@ -36,13 +36,13 @@ import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.common.util.Constants.BACKDROP_ASPECT_RATIO
 import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.feature.detail.R
 import com.dmoyahur.moviesapp.model.MovieBo
 
 @Composable
 fun DetailRoute(viewModel: DetailViewModel = hiltViewModel(), onBack: () -> Unit) {
-
     val state by viewModel.state.collectAsStateWithLifecycle(
         lifecycleOwner = LocalLifecycleOwner.current
     )
@@ -87,7 +87,7 @@ private fun MovieDetail(movie: MovieBo, modifier: Modifier = Modifier) {
                 contentDescription = movie.title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16 / 9f)
+                    .aspectRatio(BACKDROP_ASPECT_RATIO)
             )
             Text(
                 text = movie.overview,

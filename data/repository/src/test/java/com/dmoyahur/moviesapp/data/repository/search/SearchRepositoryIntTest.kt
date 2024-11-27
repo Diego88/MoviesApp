@@ -33,20 +33,19 @@ class SearchRepositoryIntTest {
     }
 
     @Test
-    fun `when findMovieSearchById is called, then return updated movie from local data source`() =
-        runTest {
-            val movie = movies.first()
-            val expectedMovie = movie.copy(popularity = movie.popularity + 1)
-            val remoteMovies = listOf(expectedMovie)
-            initRepository(remoteMovies = remoteMovies, localMovies = movies)
+    fun `when findMovieSearchById is called, then return updated movie from local data source`() = runTest {
+        val movie = movies.first()
+        val expectedMovie = movie.copy(popularity = movie.popularity + 1)
+        val remoteMovies = listOf(expectedMovie)
+        initRepository(remoteMovies = remoteMovies, localMovies = movies)
 
-            val actual = repository.findMovieSearchById(1).first()
+        val actual = repository.findMovieSearchById(1).first()
 
-            assertEquals(expectedMovie, actual)
-        }
+        assertEquals(expectedMovie, actual)
+    }
 
     @Test
-    fun `when findMovieSearchById is called and local movies count is greater than max count, then delete oldest searches`() =
+    fun `when call findMovieSearchById and searches count is greater than max count, then delete oldest searches`() =
         runTest {
             val movies = MovieMock.getMoviesBySize(MAX_HISTORY_SIZE)
             val expectedMovie = movies.first().copy(id = 15)
@@ -95,21 +94,20 @@ class SearchRepositoryIntTest {
     }
 
     @Test
-    fun `when deleteMovieSearch is called, then delete movie search from local data source`() =
-        runTest {
-            initRepository(localMovies = movies)
+    fun `when deleteMovieSearch is called, then delete movie search from local data source`() = runTest {
+        initRepository(localMovies = movies)
 
-            val sizeBeforeDelete = repository.previousSearches.first().size
-            repository.deleteMovieSearch(1)
-            val sizeAfterDelete = repository.previousSearches.first().size
+        val sizeBeforeDelete = repository.previousSearches.first().size
+        repository.deleteMovieSearch(1)
+        val sizeAfterDelete = repository.previousSearches.first().size
 
-            assertEquals(movies.size, sizeBeforeDelete)
-            assertEquals(movies.size - 1, sizeAfterDelete)
-        }
+        assertEquals(movies.size, sizeBeforeDelete)
+        assertEquals(movies.size - 1, sizeAfterDelete)
+    }
 
     private fun initRepository(
         remoteMovies: List<MovieBo> = emptyList(),
-        localMovies: List<MovieBo> = emptyList(),
+        localMovies: List<MovieBo> = emptyList()
     ) {
         val remoteDataSource = FakeSearchRemoteDataSource(remoteMovies)
         val localDataSource = FakeSearchLocalDataSource(localMovies)

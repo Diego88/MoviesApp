@@ -1,7 +1,7 @@
 package com.dmoyahur.moviesapp.data.remote.search
 
-import com.dmoyahur.moviesapp.data.remote.movies.dto.MoviesResponseDto
 import com.dmoyahur.moviesapp.data.remote.movies.dto.MovieDto
+import com.dmoyahur.moviesapp.data.remote.movies.dto.MoviesResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

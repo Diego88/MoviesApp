@@ -8,6 +8,8 @@ class JvmLibraryConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.jvm")
+                apply("moviesapp.kotlin.detekt")
+                apply("moviesapp.kotlin.ktlint")
             }
             configureKotlinJvm()
         }
