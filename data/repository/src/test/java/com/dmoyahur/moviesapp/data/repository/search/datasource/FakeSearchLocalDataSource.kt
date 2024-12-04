@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class FakeSearchLocalDataSource(
-    moviesSearch: List<MovieBo> = emptyList(),
+    moviesSearch: List<MovieBo> = emptyList()
 ) : SearchLocalDataSource {
 
     private val inMemoryMoviesSearch = MutableStateFlow(moviesSearch)

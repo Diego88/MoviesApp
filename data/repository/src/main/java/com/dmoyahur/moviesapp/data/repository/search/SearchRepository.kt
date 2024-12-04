@@ -3,6 +3,7 @@ package com.dmoyahur.moviesapp.data.repository.search
 import com.dmoyahur.moviesapp.data.repository.search.datasource.SearchLocalDataSource
 import com.dmoyahur.moviesapp.data.repository.search.datasource.SearchRemoteDataSource
 import com.dmoyahur.moviesapp.model.MovieBo
+import com.dmoyahur.moviesapp.model.error.AsyncException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -13,13 +14,13 @@ import javax.inject.Inject
 interface SearchRepository {
     val previousSearches: Flow<List<MovieBo>>
     fun findMovieSearchById(id: Int): Flow<MovieBo>
-    suspend fun searchMovie(query: String): Flow<List<MovieBo>>
+    fun searchMovie(query: String): Flow<List<MovieBo>>
     suspend fun deleteMovieSearch(id: Int)
 }
 
 class SearchRepositoryImpl @Inject constructor(
     private val remoteDataSource: SearchRemoteDataSource,
-    private val localDataSource: SearchLocalDataSource,
+    private val localDataSource: SearchLocalDataSource
 ) : SearchRepository {
 
     companion object {
@@ -33,12 +34,12 @@ class SearchRepositoryImpl @Inject constructor(
             try {
                 val remoteMovie = remoteDataSource.fetchMovieById(id)
                 saveMovieSearch(remoteMovie)
-            } catch (exception: Exception) {
+            } catch (exception: AsyncException) {
                 if (localDataSource.findMovieSearchById(id).first() == null) throw exception
             }
         }.filterNotNull()
 
-    override suspend fun searchMovie(query: String): Flow<List<MovieBo>> =
+    override fun searchMovie(query: String): Flow<List<MovieBo>> =
         flow { emit(remoteDataSource.searchMovie(query)) }
 
     override suspend fun deleteMovieSearch(id: Int) {

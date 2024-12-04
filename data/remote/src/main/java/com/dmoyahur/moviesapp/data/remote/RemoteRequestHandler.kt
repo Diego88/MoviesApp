@@ -18,7 +18,7 @@ object RemoteRequestHandler {
     }
 
     fun processError(error: Throwable): AsyncException {
-        return when(error) {
+        return when (error) {
             is HttpException, is UnknownHostException -> {
                 AsyncException.ConnectionError(error.message ?: "Connection error")
             }

@@ -87,7 +87,7 @@ class SearchViewModelTest {
         viewModel.onQueryChange(query)
 
         viewModel.searchResultUiState.test {
-            skipItems(1)    // Loading is not shown in this state
+            skipItems(1) // Loading is not shown in this state
             assertEquals(SearchResultUiState.Success(expectedMovies), awaitItem())
         }
     }

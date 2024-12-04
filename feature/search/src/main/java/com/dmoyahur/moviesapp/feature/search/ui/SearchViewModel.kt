@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.common.ui.model.Result
 import com.dmoyahur.moviesapp.common.ui.model.asResult
+import com.dmoyahur.moviesapp.common.util.Constants.SHARING_STARTED_TIMEOUT
 import com.dmoyahur.moviesapp.feature.search.domain.DeleteMovieSearchUseCase
 import com.dmoyahur.moviesapp.feature.search.domain.GetPreviousSearchesUseCase
 import com.dmoyahur.moviesapp.feature.search.domain.SearchMovieUseCase
@@ -27,7 +28,7 @@ class SearchViewModel @Inject constructor(
     getPreviousSearchesUseCase: GetPreviousSearchesUseCase,
     private val searchMovieUseCase: SearchMovieUseCase,
     private val deleteMovieSearchUseCase: DeleteMovieSearchUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     companion object {
@@ -50,7 +51,7 @@ class SearchViewModel @Inject constructor(
             }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
+                started = SharingStarted.WhileSubscribed(SHARING_STARTED_TIMEOUT),
                 initialValue = PreviousSearchesUiState.Loading
             )
 
@@ -68,7 +69,7 @@ class SearchViewModel @Inject constructor(
             }
         }.stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(SHARING_STARTED_TIMEOUT),
             initialValue = SearchResultUiState.Loading
         )
 

@@ -1,5 +1,5 @@
-
 import com.android.build.api.dsl.ApplicationExtension
+import com.dmoyahur.moviesapp.Versions
 import com.dmoyahur.moviesapp.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -11,11 +11,14 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply("moviesapp.kotlin.detekt")
+                apply("moviesapp.kotlin.ktlint")
+                apply("moviesapp.android.lint")
             }
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 34
+                defaultConfig.targetSdk = Versions.TARGET_SDK_VERSION
             }
         }
     }

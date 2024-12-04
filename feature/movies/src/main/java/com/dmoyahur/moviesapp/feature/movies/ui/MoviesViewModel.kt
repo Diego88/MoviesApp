@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dmoyahur.moviesapp.common.ui.model.Result
 import com.dmoyahur.moviesapp.common.ui.model.asResult
+import com.dmoyahur.moviesapp.common.util.Constants.SHARING_STARTED_TIMEOUT
 import com.dmoyahur.moviesapp.feature.movies.domain.GetPopularMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +26,7 @@ class MoviesViewModel @Inject constructor(getPopularMoviesUseCase: GetPopularMov
             }
         }.stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.WhileSubscribed(SHARING_STARTED_TIMEOUT),
             initialValue = MoviesUiState.Loading
         )
 }

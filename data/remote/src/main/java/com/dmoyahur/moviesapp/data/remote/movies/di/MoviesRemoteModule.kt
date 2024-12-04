@@ -28,4 +28,3 @@ internal object MoviesNetworkModule {
     fun provideMoviesNetworkApi(retrofit: Retrofit): MoviesNetworkApi =
         retrofit.create(MoviesNetworkApi::class.java)
 }
-

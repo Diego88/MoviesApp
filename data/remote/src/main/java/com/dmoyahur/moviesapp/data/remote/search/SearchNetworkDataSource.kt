@@ -1,9 +1,9 @@
 package com.dmoyahur.moviesapp.data.remote.search
 
-import com.dmoyahur.moviesapp.data.remote.movies.mapper.MovieDtoMapper
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.data.remote.RemoteRequestHandler.request
+import com.dmoyahur.moviesapp.data.remote.movies.mapper.MovieDtoMapper
 import com.dmoyahur.moviesapp.data.repository.search.datasource.SearchRemoteDataSource
+import com.dmoyahur.moviesapp.model.MovieBo
 import javax.inject.Inject
 
 class SearchNetworkDataSource @Inject constructor(

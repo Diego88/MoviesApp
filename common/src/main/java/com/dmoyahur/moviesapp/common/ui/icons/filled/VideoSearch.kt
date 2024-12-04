@@ -15,10 +15,10 @@ import com.dmoyahur.moviesapp.common.ui.icons.CustomIcons
 
 public val CustomIcons.Filled.VideoSearch: ImageVector
     get() {
-        if (_videoSearch != null) {
-            return _videoSearch!!
+        if (videoSearch != null) {
+            return videoSearch!!
         }
-        _videoSearch = ImageVector.Builder(
+        videoSearch = ImageVector.Builder(
             name = "VideoSearch",
             defaultWidth = 24.dp,
             defaultHeight = 24.dp,
@@ -68,10 +68,10 @@ public val CustomIcons.Filled.VideoSearch: ImageVector
                 close()
             }
         }.build()
-        return _videoSearch!!
+        return videoSearch!!
     }
 
-private var _videoSearch: ImageVector? = null
+private var videoSearch: ImageVector? = null
 
 @Preview(widthDp = 200, heightDp = 200)
 @Composable

@@ -1,7 +1,7 @@
 package com.dmoyahur.moviesapp.data.remote.movies.mapper
 
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.data.remote.movies.dto.MovieDto
+import com.dmoyahur.moviesapp.model.MovieBo
 
 object MovieDtoMapper {
 

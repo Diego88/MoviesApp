@@ -13,13 +13,13 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinTopLevelExtension
 
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *, *>
 ) {
     commonExtension.apply {
-        compileSdk = 34
+        compileSdk = Versions.COMPILE_SDK_VERSION
 
         defaultConfig {
-            minSdk = 24
+            minSdk = Versions.MIN_SDK_VERSION
         }
 
         compileOptions {

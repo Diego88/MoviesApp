@@ -57,7 +57,7 @@ class MoviesRepositoryIntTest {
 
     private fun initRepository(
         remoteMovies: List<MovieBo> = emptyList(),
-        localMovies: List<MovieBo> = emptyList(),
+        localMovies: List<MovieBo> = emptyList()
     ) {
         val remoteDataSource = FakeMoviesRemoteDataSource(remoteMovies)
         val localDataSource = FakeMoviesLocalDataSource(localMovies)

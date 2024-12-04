@@ -7,6 +7,7 @@ import com.dmoyahur.moviesapp.R
 import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.testShared.utils.assertTagIsDisplayed
 import com.dmoyahur.moviesapp.testShared.utils.assertTextIsDisplayed
+import com.dmoyahur.moviesapp.testShared.utils.waitUntilTagIsDisplayed
 import com.dmoyahur.moviesapp.utils.InstrumentedTest
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -22,7 +23,7 @@ class MoviesScreenTest : InstrumentedTest() {
     @Test
     fun appStarts_moviesScreenIsDisplayed(): Unit = with(composeTestRule) {
         assertTextIsDisplayed(R.string.movies)
-        assertTagIsDisplayed(TestConstants.Movies.MOVIES_LIST_TAG)
+        waitUntilTagIsDisplayed(TestConstants.Movies.MOVIES_LIST_TAG)
     }
 
     @Test
@@ -34,6 +35,7 @@ class MoviesScreenTest : InstrumentedTest() {
     fun moviesScreen_IsScrollable(): Unit = with(composeTestRule) {
         val movieToScroll by lazy { hasText("Kung Fu Panda 4") }
 
+        waitUntilTagIsDisplayed(TestConstants.Movies.MOVIES_LIST_TAG)
         scrollToMovie(movieToScroll)
     }
 

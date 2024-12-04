@@ -35,6 +35,7 @@ import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.common.util.Constants.POSTER_ASPECT_RATIO
 import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.feature.movies.R
 import com.dmoyahur.moviesapp.model.MovieBo
@@ -108,7 +109,7 @@ private fun MovieItem(movie: MovieBo, onClick: () -> Unit) {
             contentDescription = movie.title,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(2 / 3f)
+                .aspectRatio(POSTER_ASPECT_RATIO)
                 .clip(MaterialTheme.shapes.small)
         )
         Text(
@@ -140,7 +141,8 @@ private fun MoviesScreenPreview() {
                         originalLanguage = "en",
                         voteAverage = it / 10.0
                     )
-                }),
+                }
+            ),
             onMovieClick = {}
         )
     }

@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalCoroutinesApi::class)
 class FakeSearchRepository(
     private val remoteMovies: List<MovieBo>? = emptyList(),
-    localMovies: List<MovieBo> = emptyList(),
+    localMovies: List<MovieBo> = emptyList()
 ) : SearchRepository {
 
     override val previousSearches = MutableStateFlow(localMovies)
@@ -38,19 +38,17 @@ class FakeSearchRepository(
                     )
                 }
             } catch (exception: Exception) {
-                if (previousSearches.value.find { it.id == id } == null) throw exception
+                if (previousSearches.value.none { it.id == id }) throw exception
             }
         }.filterNotNull()
     }
 
-    override suspend fun searchMovie(query: String): Flow<List<MovieBo>> {
-        return withContext(Dispatchers.IO) {
-            flow {
-                remoteMovies?.filter { it.title.contains(query) }?.let { emit(it) }
-                    ?: run {
-                        throw AsyncException.ConnectionError("Connection error")
-                    }
-            }
+    override fun searchMovie(query: String): Flow<List<MovieBo>> {
+        return flow {
+            remoteMovies?.filter { it.title.contains(query) }?.let { emit(it) }
+                ?: run {
+                    throw AsyncException.ConnectionError("Connection error")
+                }
         }
     }
 

@@ -20,7 +20,7 @@ import com.dmoyahur.moviesapp.common.util.TestConstants
 fun DefaultTopBar(
     title: String,
     onBack: (() -> Unit)? = null,
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     TopAppBar(
         title = {

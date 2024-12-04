@@ -5,6 +5,8 @@ plugins {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.detekt.gradlePlugin)
+    compileOnly(libs.ktlint.gradlePlugin)
 }
 
 gradlePlugin {
@@ -48,6 +50,18 @@ gradlePlugin {
         register("diLibraryCompose") {
             id = "moviesapp.di.library.compose"
             implementationClass = "DiLibraryComposeConventionPlugin"
+        }
+        register("kotlinDetekt") {
+            id = "moviesapp.kotlin.detekt"
+            implementationClass = "DetektConventionPlugin"
+        }
+        register("ktLint") {
+            id = "moviesapp.kotlin.ktlint"
+            implementationClass = "KotlinterConventionPlugin"
+        }
+        register("androidLint") {
+            id = "moviesapp.android.lint"
+            implementationClass = "AndroidLintConventionPlugin"
         }
     }
 }

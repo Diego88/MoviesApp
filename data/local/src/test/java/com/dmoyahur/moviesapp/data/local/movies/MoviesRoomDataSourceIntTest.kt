@@ -54,23 +54,21 @@ class MoviesRoomDataSourceIntTest {
     }
 
     @Test
-    fun `when movies is called and database is empty, then return empty list`() =
-        runTest {
-            val actual = datasource.movies.first()
+    fun `when movies is called and database is empty, then return empty list`() = runTest {
+        val actual = datasource.movies.first()
 
-            Assert.assertEquals(emptyList<MovieDbo>(), actual)
-        }
+        Assert.assertEquals(emptyList<MovieDbo>(), actual)
+    }
 
     @Test
-    fun `when movies is called and database is not empty, then return movies`() =
-        runTest {
-            val expectedMovies = MovieMock.movies.sortedByDescending { it.popularity }
-            datasource.saveMovies(expectedMovies)
+    fun `when movies is called and database is not empty, then return movies`() = runTest {
+        val expectedMovies = MovieMock.movies.sortedByDescending { it.popularity }
+        datasource.saveMovies(expectedMovies)
 
-            val actual = datasource.movies.first()
+        val actual = datasource.movies.first()
 
-            Assert.assertEquals(expectedMovies, actual)
-        }
+        Assert.assertEquals(expectedMovies, actual)
+    }
 
     @Test
     fun `when saveMovies is called, then save movies in database`() = runTest {

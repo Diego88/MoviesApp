@@ -51,23 +51,21 @@ class MoviesDaoTest {
     }
 
     @Test
-    fun `when getPopularMovies is called and database is empty, then return empty list`() =
-        runTest {
-            val actual = moviesDao.getPopularMovies().first()
+    fun `when getPopularMovies is called and database is empty, then return empty list`() = runTest {
+        val actual = moviesDao.getPopularMovies().first()
 
-            assertEquals(emptyList<MovieDbo>(), actual)
-        }
+        assertEquals(emptyList<MovieDbo>(), actual)
+    }
 
     @Test
-    fun `when getPopularMovies is called and database is not empty, then return movies`() =
-        runTest {
-            val expectedMovies = MovieDboMock.moviesDbo.sortedByDescending { it.popularity }
-            moviesDao.saveMovies(expectedMovies)
+    fun `when getPopularMovies is called and database is not empty, then return movies`() = runTest {
+        val expectedMovies = MovieDboMock.moviesDbo.sortedByDescending { it.popularity }
+        moviesDao.saveMovies(expectedMovies)
 
-            val actual = moviesDao.getPopularMovies().first()
+        val actual = moviesDao.getPopularMovies().first()
 
-            assertEquals(expectedMovies, actual)
-        }
+        assertEquals(expectedMovies, actual)
+    }
 
     @Test
     fun `when saveMovies is called, then save movies in database`() = runTest {

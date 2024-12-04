@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>SwallowedException:LocalQueryHandler.kt$LocalQueryHandler$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:LocalQueryHandler.kt$LocalQueryHandler$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:RemoteRequestHandler.kt$RemoteRequestHandler$e: Throwable</ID>
+  </CurrentIssues>
+</SmellBaseline>

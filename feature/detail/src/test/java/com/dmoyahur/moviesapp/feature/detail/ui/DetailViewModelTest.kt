@@ -28,7 +28,6 @@ class DetailViewModelTest {
     @MockK
     lateinit var getMovieByIdUseCase: GetMovieByIdUseCase
 
-
     @MockK
     lateinit var savedStateHandle: SavedStateHandle
 
@@ -45,37 +44,35 @@ class DetailViewModelTest {
     }
 
     @Test
-    fun `when view model is created and fromSearch is false, then call get movie by id`() =
-        runTest {
-            val expectedMovie = MovieMock.movies.first()
-            every { getMovieByIdUseCase(1, false) } returns flowOf(expectedMovie)
+    fun `when view model is created and fromSearch is false, then call get movie by id`() = runTest {
+        val expectedMovie = MovieMock.movies.first()
+        every { getMovieByIdUseCase(1, false) } returns flowOf(expectedMovie)
 
-            viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
-            val viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
+        viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
+        val viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
 
-            viewModel.state.test {
-                assertEquals(DetailUiState.Loading, awaitItem())
-                assertEquals(DetailUiState.Success(expectedMovie), awaitItem())
-            }
+        viewModel.state.test {
+            assertEquals(DetailUiState.Loading, awaitItem())
+            assertEquals(DetailUiState.Success(expectedMovie), awaitItem())
         }
+    }
 
     @Test
-    fun `when view model is created and fromSearch is true, then call fetch movie by id`() =
-        runTest {
-            val expectedMovie = MovieMock.movies.first()
-            every {
-                savedStateHandle.getStateFlow<Boolean?>(DetailViewModel.FROM_SEARCH_ARG, null)
-            } returns MutableStateFlow(true)
-            every { getMovieByIdUseCase(1, true) } returns flowOf(expectedMovie)
+    fun `when view model is created and fromSearch is true, then call fetch movie by id`() = runTest {
+        val expectedMovie = MovieMock.movies.first()
+        every {
+            savedStateHandle.getStateFlow<Boolean?>(DetailViewModel.FROM_SEARCH_ARG, null)
+        } returns MutableStateFlow(true)
+        every { getMovieByIdUseCase(1, true) } returns flowOf(expectedMovie)
 
-            viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
-            val viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
+        viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
+        val viewModel = DetailViewModel(savedStateHandle, getMovieByIdUseCase)
 
-            viewModel.state.test {
-                assertEquals(DetailUiState.Loading, awaitItem())
-                assertEquals(DetailUiState.Success(expectedMovie), awaitItem())
-            }
+        viewModel.state.test {
+            assertEquals(DetailUiState.Loading, awaitItem())
+            assertEquals(DetailUiState.Success(expectedMovie), awaitItem())
         }
+    }
 
     @Test
     fun `when getMovieById fails, then return error`() = runTest {

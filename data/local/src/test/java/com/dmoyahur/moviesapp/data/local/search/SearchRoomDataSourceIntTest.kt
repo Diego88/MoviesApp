@@ -59,23 +59,21 @@ class SearchRoomDataSourceIntTest {
     }
 
     @Test
-    fun `when previousSearches is called and database is empty, then return empty list`() =
-        runTest {
-            val actual = datasource.previousSearches.first()
+    fun `when previousSearches is called and database is empty, then return empty list`() = runTest {
+        val actual = datasource.previousSearches.first()
 
-            Assert.assertEquals(emptyList<MovieDbo>(), actual)
-        }
+        Assert.assertEquals(emptyList<MovieDbo>(), actual)
+    }
 
     @Test
-    fun `when previousSearches is called and database is not empty, then return movies search`() =
-        runTest {
-            val expectedMovies = movies.take(2)
-            saveMovies(expectedMovies)
+    fun `when previousSearches is called and database is not empty, then return movies search`() = runTest {
+        val expectedMovies = movies.take(2)
+        saveMovies(expectedMovies)
 
-            val actual = datasource.previousSearches.first().sorted()
+        val actual = datasource.previousSearches.first().sorted()
 
-            Assert.assertEquals(expectedMovies, actual)
-        }
+        Assert.assertEquals(expectedMovies, actual)
+    }
 
     @Test
     fun `when saveMovieSearch is called, then save movies search in database`() = runTest {
@@ -100,54 +98,50 @@ class SearchRoomDataSourceIntTest {
     }
 
     @Test
-    fun `when findMovieSearchById is called and movie is not in database, then return null`() =
-        runTest {
-            saveMovies(movies)
+    fun `when findMovieSearchById is called and movie is not in database, then return null`() = runTest {
+        saveMovies(movies)
 
-            val actual = datasource.findMovieSearchById(0).first()
+        val actual = datasource.findMovieSearchById(0).first()
 
-            Assert.assertNull(actual)
-        }
-
-    @Test
-    fun `when getMovieSearchCount is called, then return the number of movies search in database`() =
-        runTest {
-            val movies = movies.take(5)
-            saveMovies(movies)
-
-            val actual = datasource.getMoviesSearchCount()
-
-            Assert.assertEquals(5, actual)
-        }
+        Assert.assertNull(actual)
+    }
 
     @Test
-    fun `when deleteMovieSearch is called, then delete movies search from database`() =
-        runTest {
-            saveMovies(movies.take(1))
+    fun `when getMovieSearchCount is called, then return the number of movies search in database`() = runTest {
+        val movies = movies.take(5)
+        saveMovies(movies)
 
-            val actualBeforeDelete = datasource.getMoviesSearchCount()
-            datasource.deleteMovieSearch(1)
-            val actualAfterDelete = datasource.getMoviesSearchCount()
+        val actual = datasource.getMoviesSearchCount()
 
-            Assert.assertEquals(1, actualBeforeDelete)
-            Assert.assertEquals(0, actualAfterDelete)
-        }
+        Assert.assertEquals(5, actual)
+    }
 
     @Test
-    fun `when deleteOldestSearches is called, then delete oldest movies search from database`() =
-        runTest {
-            val excessCount = 2
-            val expectedMoviesBeforeDelete = movies
-            val expectedMoviesAfterDelete = movies.drop(excessCount)
-            saveMovies(expectedMoviesBeforeDelete)
+    fun `when deleteMovieSearch is called, then delete movies search from database`() = runTest {
+        saveMovies(movies.take(1))
 
-            val actualBeforeDelete = datasource.previousSearches.first().sorted()
-            datasource.deleteOldestSearches(excessCount)
-            val actualAfterDelete = datasource.previousSearches.first().sorted()
+        val actualBeforeDelete = datasource.getMoviesSearchCount()
+        datasource.deleteMovieSearch(1)
+        val actualAfterDelete = datasource.getMoviesSearchCount()
 
-            Assert.assertEquals(expectedMoviesBeforeDelete, actualBeforeDelete)
-            Assert.assertEquals(expectedMoviesAfterDelete, actualAfterDelete)
-        }
+        Assert.assertEquals(1, actualBeforeDelete)
+        Assert.assertEquals(0, actualAfterDelete)
+    }
+
+    @Test
+    fun `when deleteOldestSearches is called, then delete oldest movies search from database`() = runTest {
+        val excessCount = 2
+        val expectedMoviesBeforeDelete = movies
+        val expectedMoviesAfterDelete = movies.drop(excessCount)
+        saveMovies(expectedMoviesBeforeDelete)
+
+        val actualBeforeDelete = datasource.previousSearches.first().sorted()
+        datasource.deleteOldestSearches(excessCount)
+        val actualAfterDelete = datasource.previousSearches.first().sorted()
+
+        Assert.assertEquals(expectedMoviesBeforeDelete, actualBeforeDelete)
+        Assert.assertEquals(expectedMoviesAfterDelete, actualAfterDelete)
+    }
 
     private suspend fun saveMovies(movies: List<MovieBo>) {
         withContext(Dispatchers.IO) {
@@ -159,5 +153,4 @@ class SearchRoomDataSourceIntTest {
 
     // Order movies by id (we don't have timestamp here)
     private fun List<MovieBo>.sorted() = sortedBy { it.id }
-
 }

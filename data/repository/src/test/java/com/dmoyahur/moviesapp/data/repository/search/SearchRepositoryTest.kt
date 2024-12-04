@@ -62,6 +62,7 @@ class SearchRepositoryTest {
     @Test
     fun `when findMovieSearchById is called, then return updated movie from local data source`() {
         val expectedMovie = movies.first()
+        coEvery { localDataSource.getMoviesSearchCount() } returns movies.size
 
         val actual = runBlocking { repository.findMovieSearchById(1).first() }
 
@@ -74,7 +75,7 @@ class SearchRepositoryTest {
     }
 
     @Test
-    fun `when findMovieSearchById is called and local movies count is greater than max count, then delete oldest searches`() {
+    fun `when call findMovieSearchById and searches count is greater than max count, then delete oldest searches`() {
         val movies = MovieMock.getMoviesBySize(MAX_HISTORY_SIZE + 1)
         val expectedMovie = movies.first().copy(id = 15)
         coEvery { localDataSource.findMovieSearchById(any()) } returns flowOf(expectedMovie)

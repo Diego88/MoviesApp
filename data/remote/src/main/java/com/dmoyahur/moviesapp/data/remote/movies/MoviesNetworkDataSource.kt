@@ -1,9 +1,9 @@
 package com.dmoyahur.moviesapp.data.remote.movies
 
-import com.dmoyahur.moviesapp.data.remote.movies.mapper.MovieDtoMapper
-import com.dmoyahur.moviesapp.model.MovieBo
 import com.dmoyahur.moviesapp.data.remote.RemoteRequestHandler.request
+import com.dmoyahur.moviesapp.data.remote.movies.mapper.MovieDtoMapper
 import com.dmoyahur.moviesapp.data.repository.movies.datasource.MoviesRemoteDataSource
+import com.dmoyahur.moviesapp.model.MovieBo
 import javax.inject.Inject
 
 class MoviesNetworkDataSource @Inject constructor(

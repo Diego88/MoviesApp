@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FakeSearchRemoteDataSource(
-    private val moviesSearch: List<MovieBo> = emptyList(),
+    private val moviesSearch: List<MovieBo> = emptyList()
 ) : SearchRemoteDataSource {
     override suspend fun fetchMovieById(id: Int): MovieBo = withContext(Dispatchers.IO) {
         moviesSearch.find { it.id == id } ?: run {

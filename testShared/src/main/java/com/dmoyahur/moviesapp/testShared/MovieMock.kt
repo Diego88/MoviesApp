@@ -18,6 +18,6 @@ object MovieMock {
         backdrop = "https://picsum.photos/id/$index/400/400",
         originalTitle = "originalTitle $index",
         originalLanguage = "originalLanguage $index",
-        voteAverage = index.toDouble(),
+        voteAverage = index.toDouble()
     )
 }

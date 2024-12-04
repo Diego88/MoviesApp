@@ -53,6 +53,7 @@ import com.dmoyahur.moviesapp.common.ui.components.ErrorScreen
 import com.dmoyahur.moviesapp.common.ui.components.ImageCoil
 import com.dmoyahur.moviesapp.common.ui.components.LoadingIndicator
 import com.dmoyahur.moviesapp.common.ui.components.Screen
+import com.dmoyahur.moviesapp.common.util.Constants.POSTER_ASPECT_RATIO
 import com.dmoyahur.moviesapp.common.util.TestConstants
 import com.dmoyahur.moviesapp.feature.search.R
 import com.dmoyahur.moviesapp.feature.search.util.header
@@ -62,7 +63,7 @@ import kotlin.random.Random
 @Composable
 fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel(),
-    onMovieClick: (MovieBo) -> Unit,
+    onMovieClick: (MovieBo) -> Unit
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
     val previousSearchesUiState by viewModel.previousSearchesUiState.collectAsStateWithLifecycle(
@@ -97,7 +98,7 @@ fun SearchScreen(
     onQueryChange: (String) -> Unit,
     onActiveChange: (Boolean) -> Unit,
     onMovieClick: (MovieBo) -> Unit,
-    onMovieDelete: (MovieBo) -> Unit,
+    onMovieDelete: (MovieBo) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -131,7 +132,7 @@ private fun SearchTopBar(
     onQueryChange: (String) -> Unit,
     onActiveChange: (Boolean) -> Unit,
     onMovieClick: (MovieBo) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -182,7 +183,7 @@ private fun PreviousSearchesContent(
     state: PreviousSearchesUiState,
     onMovieClick: (MovieBo) -> Unit,
     onMovieDelete: ((MovieBo) -> Unit),
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     when (state) {
         is PreviousSearchesUiState.Error -> ErrorScreen(error = state.exception)
@@ -212,7 +213,7 @@ private fun PreviousSearchesContent(
 @Composable
 private fun SearchContent(
     state: SearchResultUiState,
-    onMovieClick: (MovieBo) -> Unit,
+    onMovieClick: (MovieBo) -> Unit
 ) {
     when (state) {
         is SearchResultUiState.EmptyQuery -> EmptyScreen(
@@ -246,7 +247,7 @@ private fun SearchContent(
 private fun EmptyScreen(
     icon: ImageVector,
     @StringRes text: Int,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
@@ -307,7 +308,7 @@ private fun SearchList(
 private fun SearchItem(
     movie: MovieBo,
     onClick: () -> Unit,
-    onDelete: (() -> Unit)?,
+    onDelete: (() -> Unit)?
 ) {
     Column(
         modifier = Modifier.clickable(onClick = onClick),
@@ -319,7 +320,7 @@ private fun SearchItem(
                 contentDescription = movie.title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(2 / 3f)
+                    .aspectRatio(POSTER_ASPECT_RATIO)
                     .clip(MaterialTheme.shapes.small)
             )
             onDelete?.let {
@@ -382,7 +383,8 @@ private fun SearchScreenPreview() {
                         originalLanguage = "en",
                         voteAverage = it / 10.0
                     )
-                }),
+                }
+            ),
             query = "Movie",
             active = true,
             onQueryChange = {},
